@@ -70,6 +70,56 @@ parrot_map = a_map[-10:] + a_map[:-13] + [[582,351],[543,351],[504,351],[466,351
 duck_map = a_map[3:] + [[349,579],[349,542],[349,504],[349,467],[349,428],[349,384]]
 
 
+# cell实例化
+cell_map = [] #地图中每个cell都实例化，放到一个list中
+# # 不同颜色的cell，分别放到不同的list中
+# yellow_cells=[]
+# blue_cells=[]
+# red_cells=[]
+# green=[]
+for i in (0,len(a_map)-1):
+
+    position = a_map[i]
+    jump_po = []
+    fly_po = []
+    color = ""
+
+    if i == 48:
+        jump_po = a_map[0]
+    elif i == 49:
+        jump_po = a_map[1]
+    elif i == 50:
+        jump_po = a_map[2]
+    elif i == 51:
+        jump_po = a_map[3]
+    else:
+        jump_po = a_map[i+4]
+
+    if i in [0,4,8,12,16,20,24,28,32,36,40,44,48]:#黄色
+        color = "yellow"
+    elif i in [1,5,9,13,17,21,25,29,33,37,41,45,49]:#蓝色
+        color = "blue"
+    elif i in [2,6,10,14,18,22,26,30,34,38,42,46,50]:#红色
+        color = "red"
+    else:#绿色
+        color = "green"
+
+    if i == 6:
+        fly_po = a_map[18]
+    elif i==19:
+        fly_po = a_map[31]
+    elif i == 32:
+        fly_po = a_map[44]
+    elif i== 45:
+        fly_po = a_map[5]
+    else:
+        fly_po = []
+
+    a_cell = cell(position, jump_po, fly_po, color)
+    cell_map.append(a_cell)
+
+
+
 # 写文字方法
 # def fillText(text, position):
 #     TextFont = pygame.font.Font('images/font1.ttf', 40)
