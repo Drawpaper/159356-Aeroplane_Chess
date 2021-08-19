@@ -8,7 +8,7 @@ import time
 from pygame.locals import *
 from sys import exit
 
-from func import  drawPlayer
+from func import drawPlayer
 pygame.init()
 # 窗口定位
 os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (100, 30)
@@ -102,6 +102,23 @@ def gameControl():
     elif state == 'END':
         canvas.blit(end, (0, 0))
 
+def startpoint():
+    drawPlayer(chicken,-1)
+    drawPlayer(chicken,-2)
+    drawPlayer(chicken,-3)
+    drawPlayer(chicken,-4)
+    drawPlayer(hippo,-1)
+    drawPlayer(hippo,-2)
+    drawPlayer(hippo,-3)
+    drawPlayer(hippo,-4)
+    drawPlayer(duck,-1)
+    drawPlayer(duck,-2)
+    drawPlayer(duck,-3)
+    drawPlayer(duck,-4)
+    drawPlayer(parrot,-1)
+    drawPlayer(parrot,-2)
+    drawPlayer(parrot,-3)
+    drawPlayer(parrot,-4)
 
 gameControl()
 # 根据用户的操作切换游戏状态
@@ -115,18 +132,23 @@ while True:
                 state = 'READY'
                 gameControl()
             if state == 'READY':
+                startpoint()
                 state = 'RUNNING'
         elif event.type == KEYDOWN and event.key == K_0 and turn == 0:
             gameControl()
+            startpoint()
             turn = 1
         elif event.type == KEYDOWN and event.key == K_1 and turn == 1:
             gameControl()
+            startpoint()
             turn = 2
         elif event.type == KEYDOWN and event.key == K_2 and turn == 2:
             gameControl()
+            startpoint()
             turn = 3
         elif event.type == KEYDOWN and event.key == K_3 and turn == 3:
             gameControl()
+            startpoint()
             turn = 0
         elif final == 1:
             pygame.time.delay(15)
