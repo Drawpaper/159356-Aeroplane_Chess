@@ -10,6 +10,9 @@ from sys import exit
 
 from func import drawPlayer
 from func import drawStartPoints
+
+
+
 pygame.init()
 # 窗口定位
 os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (100, 30)
@@ -62,7 +65,7 @@ def gameControl():
         canvas.blit(start, (0, 0))
     elif state == 'READY':
         canvas.blit(bg, (0, 0))
-        drawPlayer(chicken, sum_1)
+        drawPlayer(chicken, 0)
         drawPlayer(hippo, sum_2)
         drawPlayer(parrot, sum_3)
         drawPlayer(duck, sum_4)

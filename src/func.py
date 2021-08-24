@@ -3,7 +3,7 @@
 import pygame
 import sys
 import os
-import easygui
+# import easygui
 import random
 import time
 from pygame.locals import *
@@ -64,25 +64,15 @@ a_map = [[311, 635], [273, 635], [231, 620], [213, 578], [213, 541], [235, 499],
     622,236], [637,278], [637,315], [637,351], [637,389], [637,427], [623,469], [583,484], [543,484],[
     502,469], [470,499], [485,541], [485,578], [470,620], [427,635], [389,635], [349,635]]
 
-chicken_map = a_map[16:] + a_map[:13] + [[118,351],[156,351],[194,351],[233,351],[271,351],[315,351]]
-hippo_map = a_map[29:] + a_map[:26] + [[349,125],[349,161],[349,199],[349,237],[349,275],[349,317]]
-parrot_map = a_map[-10:] + a_map[:-13] + [[582,351],[543,351],[504,351],[466,351],[428,351],[383,351]]
-duck_map = a_map[3:] + [[349,579],[349,542],[349,504],[349,467],[349,428],[349,384]]
-
 #起点坐标
 chicken_start=[[63,72],[123,72],[63,130],[123,130]]
 hippo_start=[[578,72],[635,72],[578,130],[635,130]]
 parrot_start=[[577,575],[637,575],[577,633],[637,633]]
 duck_start=[[64,575],[123,575],[64,635],[123,635]]
 
-# cell实例化
-cell_map = [] #地图中每个cell都实例化，放到一个list中
-# # 不同颜色的cell，分别放到不同的list中
-# yellow_cells=[]
-# blue_cells=[]
-# red_cells=[]
-# green=[]
-for i in (0,len(a_map)-1):
+#外围cell实例化
+cell_map = [] # 地图中外围每个cell都实例化，放到一个list中
+for i in range(0,len(a_map)-1):
 
     position = a_map[i]
     jump_po = []
@@ -123,6 +113,33 @@ for i in (0,len(a_map)-1):
     a_cell = cell(position, jump_po, fly_po, color)
     cell_map.append(a_cell)
 
+#终点cell实例化
+chicken_end=[]
+hippo_end=[]
+parrot_end=[]
+duck_end=[]
+for c in [[118,351],[156,351],[194,351],[233,351],[271,351],[315,351]]:
+    newcell= cell(c,[],[],'yellow')
+    chicken_end.append(newcell)
+for h in [[349,125],[349,161],[349,199],[349,237],[349,275],[349,317]]:
+    newcell= cell(h,[],[],'blue')
+    hippo_end.append(newcell)
+for p in [[582,351],[543,351],[504,351],[466,351],[428,351],[383,351]]:
+    newcell= cell(p,[],[],'red')
+    parrot_end.append(newcell)
+for d in [[349,579],[349,542],[349,504],[349,467],[349,428],[349,384]]:
+    newcell= cell(d,[],[],'green')
+    duck_end.append(newcell)
+
+
+# chicken_map = a_map[16:] + a_map[:13] + [[118,351],[156,351],[194,351],[233,351],[271,351],[315,351]]
+# hippo_map = a_map[29:] + a_map[:26] + [[349,125],[349,161],[349,199],[349,237],[349,275],[349,317]]
+# parrot_map = a_map[-10:] + a_map[:-13] + [[582,351],[543,351],[504,351],[466,351],[428,351],[383,351]]
+# duck_map = a_map[3:] + [[349,579],[349,542],[349,504],[349,467],[349,428],[349,384]]
+chicken_map = cell_map[16:] + cell_map[:13] + chicken_end
+hippo_map = cell_map[29:] + cell_map[:26] + hippo_end
+parrot_map = cell_map[-10:] + cell_map[:-13] + parrot_end
+duck_map = cell_map[3:] + duck_end
 
 
 # 写文字方法
@@ -134,13 +151,13 @@ for i in (0,len(a_map)-1):
 # 画玩家方法
 def drawPlayer(name, po):
     if name == 'chick':
-        canvas.blit(chicken, chicken_map[po])
+        canvas.blit(chicken, chicken_map[po].position)
     if name == 'hippo':
-        canvas.blit(hippo, hippo_map[po])
+        canvas.blit(hippo, hippo_map[po].position)
     if name == 'parrot':
-        canvas.blit(parrot, parrot_map[po])
+        canvas.blit(parrot, parrot_map[po].position)
     if name == 'duck':
-        canvas.blit(duck, duck_map[po])
+        canvas.blit(duck, duck_map[po].position)
     pygame.display.update()
 
 #画起点方法
