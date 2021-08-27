@@ -15,11 +15,16 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/func.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="1260">
               <caret line="42" selection-start-line="42" selection-end-line="42" />
+=======
+            <state relative-caret-position="387">
+              <caret line="161" lean-forward="true" selection-start-line="161" selection-end-line="161" />
+>>>>>>> cdc5885d64432d685d9dc93a04c8ebd5a69d01ef
               <folding>
                 <element signature="e#27#40#0" expanded="true" />
               </folding>
@@ -27,6 +32,7 @@
           </provider>
         </entry>
       </file>
+<<<<<<< HEAD
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/cell.py">
           <provider selected="true" editor-type-id="text-editor">
@@ -43,13 +49,48 @@
               <caret selection-end-line="4" selection-end-column="34" />
             </state>
           </provider>
+=======
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/images/chick.png">
+          <provider selected="true" editor-type-id="images" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/images/bg.png">
+          <provider selected="true" editor-type-id="images" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/images/hippo.png">
+          <provider selected="true" editor-type-id="images" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/images/parrot.png">
+          <provider selected="true" editor-type-id="images" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/images/start.png">
+          <provider selected="true" editor-type-id="images" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/images/duck.png">
+          <provider selected="true" editor-type-id="images" />
+>>>>>>> cdc5885d64432d685d9dc93a04c8ebd5a69d01ef
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/index.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="-1680">
               <caret line="10" column="27" selection-start-line="10" selection-start-column="27" selection-end-line="10" selection-end-column="27" />
+=======
+            <state relative-caret-position="-443">
+              <caret line="108" column="9" lean-forward="true" selection-start-line="108" selection-start-column="9" selection-end-line="108" selection-end-column="9" />
+>>>>>>> cdc5885d64432d685d9dc93a04c8ebd5a69d01ef
               <folding>
                 <element signature="e#27#40#0" expanded="true" />
               </folding>
@@ -97,27 +138,30 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/index.py" />
+<<<<<<< HEAD
         <option value="$PROJECT_DIR$/test/test_logic.py" />
         <option value="F:/SoftwareTest/TestApp/cgi-bin/UnitTest.py" />
         <option value="$PROJECT_DIR$/src/cell.py" />
         <option value="$PROJECT_DIR$/src/func.py" />
         <option value="$PROJECT_DIR$/src/chess.py" />
         <option value="$PROJECT_DIR$/test/testTakeOff.py" />
+=======
+        <option value="$PROJECT_DIR$/src/func.py" />
+>>>>>>> cdc5885d64432d685d9dc93a04c8ebd5a69d01ef
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="900" />
-    <option name="y" value="80" />
-    <option name="width" value="1510" />
-    <option name="height" value="1035" />
+    <option name="x" value="-14" />
+    <option name="y" value="-14" />
+    <option name="width" value="2282" />
+    <option name="height" value="1460" />
   </component>
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Course" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -131,19 +175,52 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
+<<<<<<< HEAD
               <item name="Project" type="b2602c69:ProjectViewProjectNode" />
               <item name="Project" type="462c0819:PsiDirectoryNode" />
               <item name="test" type="462c0819:PsiDirectoryNode" />
+=======
+              <item name="159356-Aeroplane_Chess" type="b2602c69:ProjectViewProjectNode" />
+              <item name="159356-Aeroplane_Chess" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="func.py" type="8704e2dd:PyFileNode" />
+            </path>
+            <path>
+              <item name="159356-Aeroplane_Chess" type="b2602c69:ProjectViewProjectNode" />
+              <item name="159356-Aeroplane_Chess" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="images" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="159356-Aeroplane_Chess" type="b2602c69:ProjectViewProjectNode" />
+              <item name="159356-Aeroplane_Chess" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="index.py" type="8704e2dd:PyFileNode" />
+            </path>
+            <path>
+              <item name="159356-Aeroplane_Chess" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+            </path>
+            <path>
+              <item name="159356-Aeroplane_Chess" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="&lt; Python 3.7 &gt;" type="70bed36:NamedLibraryElementNode" />
+>>>>>>> cdc5885d64432d685d9dc93a04c8ebd5a69d01ef
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Course" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+<<<<<<< HEAD
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+=======
+    <property name="settings.editor.selected.configurable" value="configurable.group.tools" />
+>>>>>>> cdc5885d64432d685d9dc93a04c8ebd5a69d01ef
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -158,6 +235,30 @@
     </option>
   </component>
   <component name="RunManager" selected="Python.index">
+<<<<<<< HEAD
+=======
+    <configuration name="func" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <module name="159356-Aeroplane_Chess" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/func.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+>>>>>>> cdc5885d64432d685d9dc93a04c8ebd5a69d01ef
     <configuration name="index" type="PythonConfigurationType" factoryName="Python">
       <module name="159356-Aeroplane_Chess" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -179,6 +280,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+<<<<<<< HEAD
     <configuration name="testTakeOff" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="159356-Aeroplane_Chess" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -203,6 +305,11 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.testTakeOff" />
+=======
+    <recent_temporary>
+      <list>
+        <item itemvalue="Python.func" />
+>>>>>>> cdc5885d64432d685d9dc93a04c8ebd5a69d01ef
       </list>
     </recent_temporary>
   </component>
@@ -210,13 +317,18 @@
     <configuration />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <frame x="-7" y="-7" width="1303" height="833" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24966975" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1719243" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
+<<<<<<< HEAD
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.1866485" />
+=======
+      <window_info anchor="bottom" id="Find" order="1" visible="true" weight="0.32876712" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.25068492" />
+>>>>>>> cdc5885d64432d685d9dc93a04c8ebd5a69d01ef
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -231,6 +343,7 @@
     </layout>
   </component>
   <component name="editorHistoryManager">
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/test/test_logic.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
@@ -255,12 +368,37 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1260">
           <caret line="42" selection-start-line="42" selection-end-line="42" />
+=======
+    <entry file="file://$PROJECT_DIR$/src/images/start.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/images/parrot.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/images/duck.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/images/bg.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/images/hippo.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/images/chick.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/index.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-443">
+          <caret line="108" column="9" lean-forward="true" selection-start-line="108" selection-start-column="9" selection-end-line="108" selection-end-column="9" />
+>>>>>>> cdc5885d64432d685d9dc93a04c8ebd5a69d01ef
           <folding>
             <element signature="e#27#40#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/src/chess.py">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -282,6 +420,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1680">
           <caret line="10" column="27" selection-start-line="10" selection-start-column="27" selection-end-line="10" selection-end-column="27" />
+=======
+    <entry file="file://$PROJECT_DIR$/src/func.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="387">
+          <caret line="161" lean-forward="true" selection-start-line="161" selection-end-line="161" />
+>>>>>>> cdc5885d64432d685d9dc93a04c8ebd5a69d01ef
           <folding>
             <element signature="e#27#40#0" expanded="true" />
           </folding>

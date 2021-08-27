@@ -9,6 +9,10 @@ from pygame.locals import *
 from sys import exit
 
 from func import drawPlayer
+from func import drawStartPoints
+
+
+
 pygame.init()
 # 窗口定位
 os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (100, 30)
@@ -61,7 +65,7 @@ def gameControl():
         canvas.blit(start, (0, 0))
     elif state == 'READY':
         canvas.blit(bg, (0, 0))
-        drawPlayer(chicken, sum_1)
+        drawPlayer(chicken, 0)
         drawPlayer(hippo, sum_2)
         drawPlayer(parrot, sum_3)
         drawPlayer(duck, sum_4)
@@ -102,23 +106,16 @@ def gameControl():
     elif state == 'END':
         canvas.blit(end, (0, 0))
 
+#画原始的4枚棋子
 def startpoint():
-    drawPlayer(chicken,-1)
-    drawPlayer(chicken,-2)
-    drawPlayer(chicken,-3)
-    drawPlayer(chicken,-4)
-    drawPlayer(hippo,-1)
-    drawPlayer(hippo,-2)
-    drawPlayer(hippo,-3)
-    drawPlayer(hippo,-4)
-    drawPlayer(duck,-1)
-    drawPlayer(duck,-2)
-    drawPlayer(duck,-3)
-    drawPlayer(duck,-4)
-    drawPlayer(parrot,-1)
-    drawPlayer(parrot,-2)
-    drawPlayer(parrot,-3)
-    drawPlayer(parrot,-4)
+    for i in range(1,5):
+        drawStartPoints(chicken,-i)
+    for i in range(1,5):
+        drawStartPoints(hippo,-i)
+    for i in range(1,5):
+        drawStartPoints(duck,-i)
+    for i in range(1,5):
+        drawStartPoints(parrot,-i)
 
 gameControl()
 # 根据用户的操作切换游戏状态
