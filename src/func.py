@@ -8,6 +8,9 @@ import random
 import time
 from pygame.locals import *
 from sys import exit
+import cell
+import chess
+
 pygame.init()
 # 窗口定位
 os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (100, 30)
@@ -37,24 +40,6 @@ parrot = pygame.transform.scale(parrot, (37, 37))
 # for i in range(0, 4):
 #     dials.append(pygame.image.load('images/dial' + str(i) + '.png'))
 
-class cell:
-    def __init__(self, position, jump_po, fly_po, color):
-        self.position = position
-        self.jump_po = jump_po
-        self.fly_po = fly_po
-        self.color = color
-    def checkJump(self):
-        pass
-    def checkFly(self):
-        pass
-    def checkCollide(self):
-        pass
-
-class chess:
-    def __init__(self, cur_po, chess_type, chess_num):
-        self.cur_po = cur_po
-        self.chess_type = chess_type
-        self.chess_num = chess_num
 
 # 每格位置数组
 a_map = [[311, 635], [273, 635], [231, 620], [213, 578], [213, 541], [235, 499], [198, 469], [156, 484], [
@@ -116,7 +101,7 @@ for i in (0,len(a_map)-1):
     else:
         fly_po = []
 
-    a_cell = cell(position, jump_po, fly_po, color)
+    a_cell = cell.cell(position, jump_po, fly_po, color)
     cell_map.append(a_cell)
 
 
