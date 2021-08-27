@@ -8,7 +8,7 @@ import random
 import time
 from pygame.locals import *
 from sys import exit
-import cell
+from cell import *
 import chess
 
 pygame.init()
@@ -35,9 +35,9 @@ hippo = pygame.transform.scale(hippo, (37, 37))
 parrot = pygame.image.load('images/parrot.png')
 parrot = pygame.transform.scale(parrot, (37, 37))
 
-#骰子图像
+#加载骰子图像
 # dials = []
-# for i in range(0, 4):
+# for i in range(1, 7):
 #     dials.append(pygame.image.load('images/dial' + str(i) + '.png'))
 
 
@@ -57,46 +57,46 @@ duck_start=[[64,575],[123,575],[64,635],[123,635]]
 
 #外围cell实例化
 cell_map = [] # 地图中外围每个cell都实例化，放到一个list中
-for i in range(0,len(a_map)-1):
+for i in range(len(a_map)):
 
     position = a_map[i]
     jump_po = []
     fly_po = []
     color = ""
+    a_cell = cell(position, jump_po, fly_po, color)
+    cell_map.append(a_cell)
 
+for i in range(len(cell_map)):
     if i == 48:
-        jump_po = a_map[0]
+        cell_map[i].jump_po = cell_map[0]
     elif i == 49:
-        jump_po = a_map[1]
+        cell_map[i].jump_po = cell_map[1]
     elif i == 50:
-        jump_po = a_map[2]
+        cell_map[i].jump_po = cell_map[2]
     elif i == 51:
-        jump_po = a_map[3]
+        cell_map[i].jump_po = cell_map[3]
     else:
-        jump_po = a_map[i+4]
+        cell_map[i].jump_po = cell_map[i+4]
 
     if i in [0,4,8,12,16,20,24,28,32,36,40,44,48]:#黄色
-        color = "yellow"
+        cell_map[i].color = "yellow"
     elif i in [1,5,9,13,17,21,25,29,33,37,41,45,49]:#蓝色
-        color = "blue"
+        cell_map[i].color = "blue"
     elif i in [2,6,10,14,18,22,26,30,34,38,42,46,50]:#红色
-        color = "red"
+        cell_map[i].color = "red"
     else:#绿色
-        color = "green"
+        cell_map[i].color = "green"
 
     if i == 6:
-        fly_po = a_map[18]
+        cell_map[i].fly_po = cell_map[18]
     elif i==19:
-        fly_po = a_map[31]
+        cell_map[i].fly_po = cell_map[31]
     elif i == 32:
-        fly_po = a_map[44]
+        cell_map[i].fly_po = cell_map[44]
     elif i== 45:
-        fly_po = a_map[5]
+        cell_map[i].fly_po = cell_map[5]
     else:
-        fly_po = []
-
-    a_cell = cell.cell(position, jump_po, fly_po, color)
-    cell_map.append(a_cell)
+        cell_map[i].fly_po = []
 
 #终点cell实例化
 chicken_end=[]
@@ -104,16 +104,16 @@ hippo_end=[]
 parrot_end=[]
 duck_end=[]
 for c in [[118,351],[156,351],[194,351],[233,351],[271,351],[315,351]]:
-    newcell= cell(c,[],[],'yellow')
+    newcell= cell(c,None,None,'yellow')
     chicken_end.append(newcell)
 for h in [[349,125],[349,161],[349,199],[349,237],[349,275],[349,317]]:
-    newcell= cell(h,[],[],'blue')
+    newcell= cell(h,None,None,'blue')
     hippo_end.append(newcell)
 for p in [[582,351],[543,351],[504,351],[466,351],[428,351],[383,351]]:
-    newcell= cell(p,[],[],'red')
+    newcell= cell(p,None,None,'red')
     parrot_end.append(newcell)
 for d in [[349,579],[349,542],[349,504],[349,467],[349,428],[349,384]]:
-    newcell= cell(d,[],[],'green')
+    newcell= cell(d,None,None,'green')
     duck_end.append(newcell)
 
 
@@ -126,6 +126,9 @@ hippo_map = cell_map[29:] + cell_map[:26] + hippo_end
 parrot_map = cell_map[-10:] + cell_map[:-13] + parrot_end
 duck_map = cell_map[3:] + duck_end
 
+#获取不同棋子的地图
+def getMap():
+    return chicken_map,hippo_map,parrot_map,duck_map
 
 # 写文字方法
 # def fillText(text, position):
@@ -157,7 +160,10 @@ def drawStartPoints(name, po):
         canvas.blit(duck, duck_start[po])
     pygame.display.update()
 
-# 创建画出随机步数的方法
-# def drawStep(step, position):
+# 画出对应步数的骰子
+# def drawDial(step, position):
     # canvas.blit(dials[step-1], position)
     # pass
+
+def chosenChess(step,color):
+    return []
