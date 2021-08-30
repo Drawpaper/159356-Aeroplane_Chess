@@ -11,11 +11,15 @@ from sys import exit
 from cell import *
 import chess
 
+import tkinter as tk
+from  tkinter import messagebox
+
+
 pygame.init()
 # 窗口定位
 os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (100, 30)
 # 设置一个长宽窗口
-canvas = pygame.display.set_mode((737, 741))
+canvas = pygame.display.set_mode((967, 741))
 canvas.fill([255, 255, 255])
 # 设置窗口标题
 pygame.display.set_caption("飞行棋")
@@ -35,11 +39,6 @@ hippo = pygame.transform.scale(hippo, (37, 37))
 parrot = pygame.image.load('images/parrot.png')
 parrot = pygame.transform.scale(parrot, (37, 37))
 
-#加载骰子图像
-# dials = []
-# for i in range(1, 7):
-#     dials.append(pygame.image.load('images/dial' + str(i) + '.png'))
-
 
 # 每格位置数组
 a_map = [[311, 635], [273, 635], [231, 620], [213, 578], [213, 541], [235, 499], [198, 469], [156, 484], [
@@ -49,13 +48,13 @@ a_map = [[311, 635], [273, 635], [231, 620], [213, 578], [213, 541], [235, 499],
     622,236], [637,278], [637,315], [637,351], [637,389], [637,427], [623,469], [583,484], [543,484],[
     502,469], [470,499], [485,541], [485,578], [470,620], [427,635], [389,635], [349,635]]
 
-#起点坐标
+# 起点坐标
 chicken_start=[[63,72],[123,72],[63,130],[123,130]]
 hippo_start=[[578,72],[635,72],[578,130],[635,130]]
 parrot_start=[[577,575],[637,575],[577,633],[637,633]]
 duck_start=[[64,575],[123,575],[64,635],[123,635]]
 
-#外围cell实例化
+# 外围cell实例化
 cell_map = [] # 地图中外围每个cell都实例化，放到一个list中
 for i in range(len(a_map)):
 
@@ -98,7 +97,7 @@ for i in range(len(cell_map)):
     else:
         cell_map[i].fly_po = []
 
-#终点cell实例化
+# 终点cell实例化
 chicken_end=[]
 hippo_end=[]
 parrot_end=[]
@@ -117,10 +116,11 @@ for d in [[349,579],[349,542],[349,504],[349,467],[349,428],[349,384]]:
     duck_end.append(newcell)
 
 
-# chicken_map = a_map[16:] + a_map[:13] + [[118,351],[156,351],[194,351],[233,351],[271,351],[315,351]]
-# hippo_map = a_map[29:] + a_map[:26] + [[349,125],[349,161],[349,199],[349,237],[349,275],[349,317]]
-# parrot_map = a_map[-10:] + a_map[:-13] + [[582,351],[543,351],[504,351],[466,351],[428,351],[383,351]]
-# duck_map = a_map[3:] + [[349,579],[349,542],[349,504],[349,467],[349,428],[349,384]]
+chicken_map_pos = a_map[16:] + a_map[:13] + [[118,351],[156,351],[194,351],[233,351],[271,351],[315,351]]
+hippo_map_pos = a_map[29:] + a_map[:26] + [[349,125],[349,161],[349,199],[349,237],[349,275],[349,317]]
+parrot_map_pos = a_map[-10:] + a_map[:-13] + [[582,351],[543,351],[504,351],[466,351],[428,351],[383,351]]
+duck_map_pos = a_map[3:] + [[349,579],[349,542],[349,504],[349,467],[349,428],[349,384]]
+
 chicken_map = cell_map[16:] + cell_map[:13] + chicken_end
 hippo_map = cell_map[29:] + cell_map[:26] + hippo_end
 parrot_map = cell_map[-10:] + cell_map[:-13] + parrot_end
@@ -160,10 +160,108 @@ def drawStartPoints(name, po):
         canvas.blit(duck, duck_start[po])
     pygame.display.update()
 
-# 画出对应步数的骰子
-# def drawDial(step, position):
-    # canvas.blit(dials[step-1], position)
-    # pass
+
+
+# 加载骰子图像
+dials = []
+for i in range(1, 7):
+    dials.append(pygame.image.load('images/'+str(i) + '.png'))
+# 以step(1-6的随机数/掷色子的结果)为输入，找到对应的骰子图像显示在屏幕上（需要把页面变宽 能够放下一个筛子的图像）
+def drawDial(step):
+    canvas.blit(dials[step-1], [737,0])
+
+
+
+# 1.输入：①step，②当前轮棋子的类别,③该类棋子list
+# 2.根据骰子点数选择可选棋子
+#   ①如果掷色子数step为6，增加飞机场的棋子起飞这一选择
+#   ②判断在地图上已出发的棋子有几个，是否在step步后未超出终点，若未超出则作为选择之一，若step数大于其到达终点的格数此棋子不可选
+# 3.返回：可选棋子的chess_num，即该棋子在该类棋子list中的（index+1）（多个options）
+# e.g.  getOptions(2,'chick',chicken_chess)
+def getOptions(step,chesstype,chesslist):
+
+    if chesstype=='chick':
+        chessmap=chicken_map_pos
+    elif chesstype=='hippo':
+        chessmap=hippo_map_pos
+    elif chesstype=='parrot':
+        chessmap=parrot_map_pos
+    else:
+        chessmap=duck_map_pos
+
+    options=[]
+    for a_piece in chesslist:
+        pos=a_piece.cur_cell.position # 得到当前棋子所在cell的位置坐标
+
+        if pos not in chessmap: # 该棋子还未起飞
+            if  step==6: # 掷色子数为6，满足起飞的条件
+                options.append(a_piece.chess_num)
+        else:
+            index=chessmap.index(pos)
+            if (index+step+1) <= len(chessmap): # 若step数大于其到达终点的格数，此棋子不可选
+                options.append(a_piece.chess_num)
+
+    return options
+
+
+
+# 1.输入:①可选棋子的chess_num，即该棋子在该类棋子list中的（index+1）,为getOptions函数的返回值
+#       ②当前轮棋子的类别
+#       ③该类棋子list
+# 2.触发弹框使用户选择最终移动的棋子
+# 3.返回：棋子的chess_num，
+#       (num-1)即为该棋子在chicken_chess或其他种chesslist中的index，
+#       chicken_chess[num-1]即为所选的棋子
+# selectOption([1,2],chicken_chess) options中的数字不可能为0
+def selectOption(options,chesslist):
+
+    chesstype=chesslist[0].chess_type
+    if chesstype=='chick':
+        chessmap=chicken_map_pos
+    elif chesstype=='hippo':
+        chessmap=hippo_map_pos
+    elif chesstype=='parrot':
+        chessmap=parrot_map_pos
+    else:
+        chessmap=duck_map_pos
+
+    options_text="" # 显示所有可选择的棋子信息
+    for op in options:
+        pos=chesslist[op-1].cur_cell.position # 该棋子当前位置的坐标
+        if pos not in chessmap: # 还未起飞的棋子
+            options_text=options_text+"No"+str(op)+": At the airport! "+"\n"
+        else:
+            index=chessmap.index(pos) # 在该类棋子的路线中，该坐标是第几个位置 ----> 使玩家知道是地图上哪个棋子
+            options_text=options_text+"No"+str(op)+": on the "+str(index)+"th grid of its own route"+str(pos)+"\n"
+
+    root = tk.Tk()
+    root.title("Choose a piece")
+    root.geometry('500x200')
+
+    la = tk.Label(root, text= options_text)
+    la.pack()
+    xls_text = tk.StringVar()
+    xls = tk.Entry(root, textvariable = xls_text)
+    xls_text.set("")
+    xls.pack()
+
+    def on_click(): # 点击press触发
+        global num
+        num = xls_text.get()
+        if num=="" or (int(num) not in options): # 若玩家未输入所选棋子的号码 或 输入不符合规则的数字，新弹出警告窗口
+            messagebox.showinfo("warning","You must choose a piece and enter its number!")
+        if num!="" and (int(num) in options): # 若玩家输入符合规则的所选棋子的号码，原窗口自动关闭
+            root.quit()
+            root.destroy()
+
+    tk.Button(root, text="press", command = on_click).pack()
+    root.mainloop()
+
+    return num
+
 
 def chosenChess(step,color):
     return []
+
+
+

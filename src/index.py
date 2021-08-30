@@ -11,20 +11,23 @@ from sys import exit
 from func import drawPlayer
 from func import drawStartPoints
 from func import getMap
+from func import drawDial
+from func import getOptions
+from func import selectOption
 from chess import *
 
 pygame.init()
 # 窗口定位
 os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (100, 30)
 # 设置一个长宽窗口
-canvas = pygame.display.set_mode((737, 741))
+canvas = pygame.display.set_mode((967, 741))
 canvas.fill([255, 255, 255])
 # 设置窗口标题
 pygame.display.set_caption("Game")
 
 # 图片加载
 start = pygame.image.load('images/start.png')
-start = pygame.transform.scale(start, (750, 1000))
+start = pygame.transform.scale(start, (967, 741))
 bg = pygame.image.load('images/bg.png')
 end = pygame.image.load('images/gameover.png')
 
@@ -46,13 +49,14 @@ final = 0
 #实例化十六个棋子
 chicken_map,hippo_map,parrot_map,duck_map = getMap()
 #黄色
-chicken_chess = [chess('chick',i+1, chicken_map) for i in range(4)]
+chicken_chess = [chess('chick',i+1, chicken_map) for i in range(4)] #第1，2，3，4个棋子
 #蓝色
 hippo_chess = [chess('hippo',i+1, hippo_map) for i in range(4)]
 #红色
 parrot_chess = [chess('parrot',i+1, parrot_map) for i in range(4)]
 #绿色
 duck_chess = [chess('duck',i+1, duck_map) for i in range(4)]
+
 
 #后来需要去掉，现在这样可以让程序运行起来，之后要使用每个chess中的sum
 sum_1 = 0
@@ -62,8 +66,10 @@ sum_4 = 0
 
 def gameControl():
     global turn,sum_1,sum_2,sum_3,sum_4
-    # step = random.randint(1, 6)
-    step = 1
+
+    step = random.randint(1, 6)#得到随机扔色子数
+    # step = 1
+
     if state == 'START':
         canvas.blit(start, (0, 0))
     elif state == 'READY':
@@ -74,9 +80,14 @@ def gameControl():
         startpoint()
         if turn == 0:
             #希纯：
-            #一个函数以step为输入，找到对应的骰子图像显示在屏幕上
-            #一个函数以step与当前轮棋子的类为输入，判断骰子点数选择可选棋子 返回可选棋子的类（注意若step数大于其到达终点的格数此棋子不可选）（多个）
-            #一个函数以可选棋子的类为输入，在其中触发弹框使用户选择移动的棋子，返回对应棋子的类（一个）
+
+            # ① 一个函数以step(1-6的随机数/掷色子的结果)为输入，找到对应的骰子图像显示在屏幕上（需要把页面变宽 能够放下一个筛子的图像）
+            drawDial(step)
+
+            # ② options=getOptions(2,'chick',chicken_chess) ！！！cur_cell未解决！！！ 具体解释见func.py
+
+            # ③ selectOption(options,chicken_chess) ！！！cur_cell未解决！！！ 具体解释见func.py
+
 
             #莹莹：
             #一个函数以用户所选棋子的类为输入，判断棋子的位置（通过判断棋子的sum或cur_cell）

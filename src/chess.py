@@ -11,7 +11,7 @@ class chess:
         self.cur_cell.deleteCurrentChess(self)
         if cell in self.chess_map:
             self.sum = self.chess_map.index(cell)
-            self.cur_cell = cell
+            self.cur_cell = cell # 实例化的某一cell，有 position, jump_po, fly_po, color
 
     def takeOff(self):
         pass
