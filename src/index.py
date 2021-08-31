@@ -14,7 +14,9 @@ from func import getMap
 from func import drawDial
 from func import getOptions
 from func import selectOption
+from func import determineOption
 from chess import *
+from cell import *
 
 pygame.init()
 # 窗口定位
@@ -50,13 +52,21 @@ final = 0
 chicken_map,hippo_map,parrot_map,duck_map = getMap()
 #黄色
 chicken_chess = [chess('chick',i+1, chicken_map) for i in range(4)] #第1，2，3，4个棋子
+for i in range(4):
+    chicken_chess[i].cur_cell=chicken_map[i]
+
 #蓝色
 hippo_chess = [chess('hippo',i+1, hippo_map) for i in range(4)]
+for i in range(4):
+    hippo_chess[i].cur_cell=hippo_map[i]
 #红色
 parrot_chess = [chess('parrot',i+1, parrot_map) for i in range(4)]
+for i in range(4):
+    parrot_chess[i].cur_cell=parrot_map[i]
 #绿色
 duck_chess = [chess('duck',i+1, duck_map) for i in range(4)]
-
+for i in range(4):
+    duck_chess[i].cur_cell=duck_map[i]
 
 #后来需要去掉，现在这样可以让程序运行起来，之后要使用每个chess中的sum
 sum_1 = 0
@@ -79,15 +89,34 @@ def gameControl():
         canvas.blit(bg, (0, 0))
         startpoint()
         if turn == 0:
+            #随机摇骰子->判断骰子点数->判断当前可选骰子->玩家选择棋子->判断当前棋子位置->计算棋子前进位置：起飞、跳、飞
             #希纯：
 
             # ① 一个函数以step(1-6的随机数/掷色子的结果)为输入，找到对应的骰子图像显示在屏幕上（需要把页面变宽 能够放下一个筛子的图像）
             drawDial(step)
 
+            #一个函数以step与当前轮棋子的类为输入，判断骰子点数选择可选棋子 返回可选棋子的类（注意若step数大于其到达终点的格数此棋子不可选）（多个）
             # ② options=getOptions(2,'chick',chicken_chess) ！！！cur_cell未解决！！！ 具体解释见func.py
 
+            #一个函数以可选棋子的类为输入，在其中触发弹框使用户选择移动的棋子，返回对应棋子的类（一个）
             # ③ selectOption(options,chicken_chess) ！！！cur_cell未解决！！！ 具体解释见func.py
-
+            options=getOptions(step,'chick',chicken_chess)
+            num=int(selectOption(options,chicken_chess))
+            cur_sum=determineOption(step,num,chicken_chess)
+            # chessNow=chicken_chess[num-1]
+            # if chessNow.sum==None:
+            #     chessNow.sum=0
+            #     chessNow.takeOff(num-1)
+            #     for i in cell_map:
+            #
+            #     cell()
+            #     # chessNow.update(chessNow.cur_cell)
+            # else:
+            #     chessNow.sum+=step
+            #     chessNow.update(chessNow.cur_cell)
+            #     checkJump(chessNow)
+            #     checkFly(chessNow)
+            #     # chessNow.update(chessNow.cur_cell)
 
             #莹莹：
             #一个函数以用户所选棋子的类为输入，判断棋子的位置（通过判断棋子的sum或cur_cell）
@@ -96,19 +125,34 @@ def gameControl():
                     #调用该cell中的checkJump与checkFly函数。这两个函数以当前chess为输入判断是否该chess是否可以跳棋或飞棋若能返回最终cell，不能返回None
                     #根据得到的最终位置的cell更新当前chess中的sum与cur_cell信息,并更新最终cell与之前cell中cur_chess的信息
             #将下面的drawPlayer(chicken, sum_1)替换为
-            #for i in range(len(chicken_chess)):
-                #drawPlayer(chicken_chess[i].type, chicken_chess[i].sum)
+            # for i in range(len(chicken_chess)):
+            #     drawPlayer(chicken_chess[i].chess_type, chicken_chess[i].sum)
             #其他同理，即可通过运行程序验证程序是否正确
 
             #这部分之后可以去掉
-            sum_1 = sum_1 + step
-
+            sum_1 = sum_1 + cur_sum
+        #    drawPlayer(chicken, sum_1)
         elif turn == 1:
-            sum_2 = sum_2 + step
+            drawDial(step)
+            options=getOptions(step,'hippo',hippo_chess)
+            num=int(selectOption(options,hippo_chess))
+            cur_sum=determineOption(step,num,hippo_chess)
+            sum_2 = sum_2 + cur_sum
+         #   drawPlayer(hippo, sum_2)
         elif turn == 2:
-            sum_3 = sum_3 + step
+            drawDial(step)
+            options=getOptions(step,'parrot',parrot_chess)
+            num=int(selectOption(options,parrot_chess))
+            cur_sum=determineOption(step,num,parrot_chess)
+            sum_3 = sum_3 + cur_sum
+         #   drawPlayer(parrot, sum_3)
         elif turn == 3:
-            sum_4 = sum_4 + step
+            drawDial(step)
+            options=getOptions(step,'duck',duck_chess)
+            num=int(selectOption(options,duck_chess))
+            cur_sum=determineOption(step,num,duck_chess)
+            sum_4 = sum_4 + cur_sum
+        #    drawPlayer(duck, sum_4)
             # if sum_4 < 60:
             #     pass
             # else:

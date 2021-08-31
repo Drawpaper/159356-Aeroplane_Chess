@@ -14,7 +14,6 @@ import chess
 import tkinter as tk
 from  tkinter import messagebox
 
-
 pygame.init()
 # 窗口定位
 os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (100, 30)
@@ -57,7 +56,6 @@ duck_start=[[64,575],[123,575],[64,635],[123,635]]
 # 外围cell实例化
 cell_map = [] # 地图中外围每个cell都实例化，放到一个list中
 for i in range(len(a_map)):
-
     position = a_map[i]
     jump_po = []
     fly_po = []
@@ -214,7 +212,6 @@ def getOptions(step,chesstype,chesslist):
 #       chicken_chess[num-1]即为所选的棋子
 # selectOption([1,2],chicken_chess) options中的数字不可能为0
 def selectOption(options,chesslist):
-
     chesstype=chesslist[0].chess_type
     if chesstype=='chick':
         chessmap=chicken_map_pos
@@ -259,6 +256,37 @@ def selectOption(options,chesslist):
 
     return num
 
+#一个函数以用户所选棋子的类为输入，判断棋子的位置（通过判断棋子的sum或cur_cell）
+    #若为none则为起始点，则执行chess中的起飞函数。该函数使当前棋子移动到该棋子路线上的第一个cell，并更新此cell的信息
+    #若不为none则为普通点，则根据调用当前棋子的地图与sum判断前进后的cell，返回该cell
+        #调用该cell中的checkJump与checkFly函数。这两个函数以当前chess为输入判断是否该chess是否可以跳棋或飞棋若能返回最终cell，不能返回None
+        #根据得到的最终位置的cell更新当前chess中的sum与cur_cell信息,并更新最终cell与之前cell中cur_chess的信息
+
+def determineOption(step,num,chesslist):
+    chessNow=chesslist[num-1]
+    if chessNow.sum==None:
+        chessNow.takeOff(num-1)
+        for i in cell_map:
+            if chessNow.cur_cell==i:
+                i.cur_chess.append(chessNow)
+        chessNow.update(chessNow.cur_cell)
+    else:
+        chessNow.sum+=step
+        for i in cell_map:
+            if chessNow.cur_cell==i:
+                i.cur_chess.append(chessNow)
+        # chessNow.update(chessNow.cur_cell)
+        jumpchess=checkJump(chessNow)
+        if jumpchess!=None:
+            chessNow=jumpchess
+        flychess=checkFly(chessNow)
+        if flychess!=None:
+            chessNow=flychess
+        for i in cell_map:
+            if chessNow.cur_cell==i:
+                i.cur_chess.append(chessNow)
+        chessNow.update(chessNow.cur_cell)
+    return chessNow.sum
 
 def chosenChess(step,color):
     return []
