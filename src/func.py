@@ -8,7 +8,7 @@ import random
 import time
 from pygame.locals import *
 from sys import exit
-from cell import *
+from  cell import *
 import chess
 
 import tkinter as tk
@@ -242,7 +242,9 @@ def selectOption(options,chesslist):
 
     if options==[]:# 没有棋子可以移动
         messagebox.showinfo("warning","In this turn, you have no pieces to move.")
-        return 0
+        root.quit()
+        root.destroy()
+        return False
 
     chesstype=chesslist[0].chess_type
     if chesstype=='chick':
@@ -291,33 +293,52 @@ def selectOption(options,chesslist):
         #根据得到的最终位置的cell更新当前chess中的sum与cur_cell信息,并更新最终cell与之前cell中cur_chess的信息
 
 def determineOption(step,num,chesslist):
-    chessNow=chesslist[num-1]
-    if chessNow.sum==None:
-        chessNow.takeOff(num-1)
-        for i in cell_map:
-            if chessNow.cur_cell==i:
-                i.cur_chess.append(chessNow)
-        chessNow.update(chessNow.cur_cell)
+    if num==False:
+        return 0
     else:
-        chessNow.sum+=step
-        for i in cell_map:
-            if chessNow.cur_cell==i:
-                i.cur_chess.append(chessNow)
-        # chessNow.update(chessNow.cur_cell)
-        jumpchess=checkJump(chessNow)
-        if jumpchess!=None:
-            chessNow=jumpchess
-        flychess=checkFly(chessNow)
-        if flychess!=None:
-            chessNow=flychess
-        for i in cell_map:
-            if chessNow.cur_cell==i:
-                i.cur_chess.append(chessNow)
-        chessNow.update(chessNow.cur_cell)
-    return chessNow.sum
+        chessNow=chesslist[num-1]
+        if chessNow.sum==None:
+            chessNow.takeOff(num-1)
+            #更新cell的信息
+            if chessNow.chess_type=='chick':
+                chessNow.cur_cell=cell_map[16]
+                cell_map[16].cur_chess.append(chessNow)
+            elif chessNow.chess_type=='hippo':
+                chessNow.cur_cell=cell_map[29]
+                cell_map[29].cur_chess.append(chessNow)
+            elif chessNow.chess_type=='parrot':
+                chessNow.cur_cell=cell_map[-10]
+                cell_map[-10].cur_chess.append(chessNow)
+            else:
+                chessNow.cur_cell=cell_map[3]
+                cell_map[3].cur_chess.append(chessNow)
+            chessNow.update(chessNow.cur_cell)
+        else:
+            chessNow.sum+=step
+            for i in cell_map:
+                if chessNow.cur_cell==i:
+                    i.cur_chess.append(chessNow)
+                    break
+            chessNow.update(chessNow.cur_cell)
+            #跳棋
+            jumpchess=chessNow.cur_cell.checkJump(chessNow)
+            if jumpchess!=None:
+                chessNow=jumpchess
+                for i in cell_map:
+                    if chessNow.cur_cell==i:
+                        i.cur_chess.append(chessNow)
+                        break
+                chessNow.update(chessNow.cur_cell)
+            #飞棋
+            flychess=chessNow.cur_cell.checkFly(chessNow)
+            if flychess!=None:
+                chessNow=flychess
+                for i in cell_map:
+                    if chessNow.cur_cell==i:
+                        i.cur_chess.append(chessNow)
+                        break
+                chessNow.update(chessNow.cur_cell)
+        return chessNow.sum
 
 def chosenChess(step,color):
     return []
-
-
-
