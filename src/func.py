@@ -52,6 +52,25 @@ chicken_start=[[63,72],[123,72],[63,130],[123,130]]
 hippo_start=[[578,72],[635,72],[578,130],[635,130]]
 parrot_start=[[577,575],[637,575],[577,633],[637,633]]
 duck_start=[[64,575],[123,575],[64,635],[123,635]]
+# 起点坐标实例化（飞机场内cell）
+chicken_airport=[]
+hippo_airport=[]
+parrot_airport=[]
+duck_airport=[]
+for c in chicken_start:
+    newcell= cell(c,None,None,'yellow')
+    chicken_airport.append(newcell)
+for h in hippo_start:
+    newcell= cell(h,None,None,'blue')
+    hippo_airport.append(newcell)
+for p in parrot_start:
+    newcell= cell(p,None,None,'red')
+    parrot_airport.append(newcell)
+for d in duck_start:
+    newcell= cell(d,None,None,'green')
+    duck_airport.append(newcell)
+
+
 
 # 外围cell实例化
 cell_map = [] # 地图中外围每个cell都实例化，放到一个list中
@@ -113,7 +132,7 @@ for d in [[349,579],[349,542],[349,504],[349,467],[349,428],[349,384]]:
     newcell= cell(d,None,None,'green')
     duck_end.append(newcell)
 
-
+# 不同棋子各自的外围+终点路线
 chicken_map_pos = a_map[16:] + a_map[:13] + [[118,351],[156,351],[194,351],[233,351],[271,351],[315,351]]
 hippo_map_pos = a_map[29:] + a_map[:26] + [[349,125],[349,161],[349,199],[349,237],[349,275],[349,317]]
 parrot_map_pos = a_map[-10:] + a_map[:-13] + [[582,351],[543,351],[504,351],[466,351],[428,351],[383,351]]
@@ -124,9 +143,13 @@ hippo_map = cell_map[29:] + cell_map[:26] + hippo_end
 parrot_map = cell_map[-10:] + cell_map[:-13] + parrot_end
 duck_map = cell_map[3:] + duck_end
 
-#获取不同棋子的地图
+# 获取不同棋子的地图
 def getMap():
     return chicken_map,hippo_map,parrot_map,duck_map
+
+# 获取不同棋子的起点cell，即飞机场内cell
+def getAirport():
+    return chicken_airport,hippo_airport,parrot_airport,duck_airport
 
 # 写文字方法
 # def fillText(text, position):
@@ -212,6 +235,15 @@ def getOptions(step,chesstype,chesslist):
 #       chicken_chess[num-1]即为所选的棋子
 # selectOption([1,2],chicken_chess) options中的数字不可能为0
 def selectOption(options,chesslist):
+
+    root = tk.Tk()
+    root.title("Choose a piece")
+    root.geometry('500x200')
+
+    if options==[]:# 没有棋子可以移动
+        messagebox.showinfo("warning","In this turn, you have no pieces to move.")
+        return 0
+
     chesstype=chesslist[0].chess_type
     if chesstype=='chick':
         chessmap=chicken_map_pos
@@ -230,10 +262,6 @@ def selectOption(options,chesslist):
         else:
             index=chessmap.index(pos) # 在该类棋子的路线中，该坐标是第几个位置 ----> 使玩家知道是地图上哪个棋子
             options_text=options_text+"No"+str(op)+": on the "+str(index)+"th grid of its own route"+str(pos)+"\n"
-
-    root = tk.Tk()
-    root.title("Choose a piece")
-    root.geometry('500x200')
 
     la = tk.Label(root, text= options_text)
     la.pack()

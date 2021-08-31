@@ -15,6 +15,7 @@ from func import drawDial
 from func import getOptions
 from func import selectOption
 from func import determineOption
+from func import getAirport
 from chess import *
 from cell import *
 
@@ -50,23 +51,23 @@ final = 0
 
 #实例化十六个棋子
 chicken_map,hippo_map,parrot_map,duck_map = getMap()
+chicken_airport,hippo_airport,parrot_airport,duck_airport=getAirport()
 #黄色
-chicken_chess = [chess('chick',i+1, chicken_map) for i in range(4)] #第1，2，3，4个棋子
+chicken_chess = [chess('chick',i+1, chicken_airport) for i in range(4)] #第1，2，3，4个棋子
 for i in range(4):
-    chicken_chess[i].cur_cell=chicken_map[i]
-
+    chicken_chess[i].cur_cell=chicken_airport[i]
 #蓝色
-hippo_chess = [chess('hippo',i+1, hippo_map) for i in range(4)]
+hippo_chess = [chess('hippo',i+1, hippo_airport) for i in range(4)]
 for i in range(4):
-    hippo_chess[i].cur_cell=hippo_map[i]
+    hippo_chess[i].cur_cell=hippo_airport[i]
 #红色
-parrot_chess = [chess('parrot',i+1, parrot_map) for i in range(4)]
+parrot_chess = [chess('parrot',i+1, parrot_airport) for i in range(4)]
 for i in range(4):
-    parrot_chess[i].cur_cell=parrot_map[i]
+    parrot_chess[i].cur_cell=parrot_airport[i]
 #绿色
-duck_chess = [chess('duck',i+1, duck_map) for i in range(4)]
+duck_chess = [chess('duck',i+1, duck_airport) for i in range(4)]
 for i in range(4):
-    duck_chess[i].cur_cell=duck_map[i]
+    duck_chess[i].cur_cell=duck_airport[i]
 
 #后来需要去掉，现在这样可以让程序运行起来，之后要使用每个chess中的sum
 sum_1 = 0
