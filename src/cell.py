@@ -11,9 +11,21 @@ class cell:
         self.cur_chess.append(chess)
     def deleteCurrentChess(self,chess):
         self.cur_chess.remove(chess)
-    def checkJump(self):
-        pass
-    def checkFly(self):
-        pass
+    def checkJump(self,chess):
+        if self.jump_po!=[]:
+            chess.cur_cell.position=self.jump_po
+            chess.sum+=4
+            self.cur_chess.append(chess)
+            return chess
+        else:
+            return None
+    def checkFly(self,chess):
+        if self.fly_po!=[]:
+            chess.cur_cell.position=self.fly_po
+            chess.sum+=12
+            self.cur_chess.append(chess)
+            return chess
+        else:
+            return None
     def checkCollide(self):
         pass
