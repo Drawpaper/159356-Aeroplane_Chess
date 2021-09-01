@@ -20,7 +20,7 @@ class cell:
         else:
             return None
     def checkFly(self,chess):
-        if self.fly_po!=[]:
+        if self.fly_po!=[] and ((self.color=='yellow' and chess.chess_type=='chick') or (self.color=='blue' and chess.chess_type=='hippo') or (self.color=='red' and chess.chess_type=='parrot') or (self.color=='green' and chess.chess_type=='duck')):
             chess.cur_cell.position=self.fly_po
             chess.sum+=12
             self.cur_chess.append(chess)
