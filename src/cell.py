@@ -12,7 +12,7 @@ class cell:
     def deleteCurrentChess(self,chess):
         self.cur_chess.remove(chess)
     def checkJump(self,chess):
-        if self.jump_po!=[] and((self.color=='yellow' and chess.chess_type=='chick')or(self.color=='blue' and chess.chess_type=='hippo')or(self.color=='red' and chess.chess_type=='parrot')or(self.color=='green' and chess.chess_type=='duck')):
+        if self.jump_po!=[] and ((self.color=='yellow' and chess.chess_type=='chick') or (self.color=='blue' and chess.chess_type=='hippo') or (self.color=='red' and chess.chess_type=='parrot') or (self.color=='green' and chess.chess_type=='duck')):
             chess.cur_cell.position=self.jump_po
             chess.sum+=4
             self.cur_chess.append(chess)

@@ -315,27 +315,42 @@ def determineOption(step,num,chesslist):
             chessNow.update(chessNow.cur_cell)
         else:
             chessNow.sum+=step
-            for i in cell_map:
-                if chessNow.cur_cell==i:
-                    i.cur_chess.append(chessNow)
+            for i in range(len(cell_map)):
+                if chessNow.cur_cell==cell_map[i]:
+                    if i+step<=51:
+                        chessNow.cur_cell=cell_map[i+step]
+                        cell_map[i+step].cur_chess.append(chessNow)
+                    else:
+                        chessNow.cur_cell=cell_map[i+step-50]
+                        cell_map[i+step-50].cur_chess.append(chessNow)
                     break
             chessNow.update(chessNow.cur_cell)
             #跳棋
             jumpchess=chessNow.cur_cell.checkJump(chessNow)
             if jumpchess!=None:
                 chessNow=jumpchess
-                for i in cell_map:
-                    if chessNow.cur_cell==i:
-                        i.cur_chess.append(chessNow)
+                for i in range(len(cell_map)):
+                    if chessNow.cur_cell==cell_map[i]:
+                        if i+4<=51:
+                            chessNow.cur_cell=cell_map[i+4]
+                            cell_map[i+4].cur_chess.append(chessNow)
+                        else:
+                            chessNow.cur_cell=cell_map[i+4-50]
+                            cell_map[i+4-50].cur_chess.append(chessNow)
                         break
                 chessNow.update(chessNow.cur_cell)
             #飞棋
             flychess=chessNow.cur_cell.checkFly(chessNow)
             if flychess!=None:
                 chessNow=flychess
-                for i in cell_map:
-                    if chessNow.cur_cell==i:
-                        i.cur_chess.append(chessNow)
+                for i in range(len(cell_map)):
+                    if chessNow.cur_cell==cell_map[i]:
+                        if i+12<=51:
+                            chessNow.cur_cell=cell_map[i+12]
+                            cell_map[i+12].cur_chess.append(chessNow)
+                        else:
+                            chessNow.cur_cell=cell_map[i+12-50]
+                            cell_map[i+12-50].cur_chess.append(chessNow)
                         break
                 chessNow.update(chessNow.cur_cell)
         return chessNow.sum
