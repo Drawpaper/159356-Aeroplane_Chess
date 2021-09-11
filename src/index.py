@@ -97,6 +97,8 @@ def gameControl():
             # drawDial(step)
 
             #一个函数以step与当前轮棋子的类为输入，判断骰子点数选择可选棋子 返回可选棋子的类（注意若step数大于其到达终点的格数此棋子不可选）（多个）
+##################(修改)step数之内的cell（不包括最终的cell）若有cell有两个或两个以上的其他颜色的相同颜色棋子（叠子）则当前棋子也不能被选择
+
             # ② options=getOptions(2,'chick',chicken_chess) ！！！cur_cell未解决！！！ 具体解释见func.py
 
             #一个函数以可选棋子的类为输入，在其中触发弹框使用户选择移动的棋子，返回对应棋子的类（一个）
@@ -109,8 +111,21 @@ def gameControl():
             #一个函数以用户所选棋子的类为输入，判断棋子的位置（通过判断棋子的sum或cur_cell）
                 #若为none则为起始点，则执行chess中的起飞函数。该函数使当前棋子移动到该棋子路线上的第一个cell，并更新此cell的信息
                 #若不为none则为普通点，则根据调用当前棋子的地图与sum判断前进后的cell，返回该cell
+#####################(修改，增加)调用该cell中的checkCollide函数判断是否有与当前棋子颜色不同的其他棋子在此cell中
+                        #若有则返回这些棋子（注意：可能会有多个相同颜色的棋子在一个cell中），并将这些棋子的类初始化（置于起飞点）
+                        #若无则返回none
                     #调用该cell中的checkJump与checkFly函数。这两个函数以当前chess为输入判断是否该chess是否可以跳棋或飞棋若能返回最终cell，不能返回None
+#########################(修改，增加)若可以跳棋或飞棋则仍需再次调用cell中的checkCollide函数判断是否有与当前棋子颜色不同的其他棋子在最终cell中
+                            #若有则返回这些棋子（注意：可能会有多个相同颜色的棋子在一个cell中），并将这些棋子的类初始化（置于起飞点）
+                            #若无则返回none
                     #根据得到的最终位置的cell更新当前chess中的sum与cur_cell信息,并更新最终cell与之前cell中cur_chess的信息
+
+            #希纯：
+#############（修改，增加）判断当前类别所有棋子的位置，若分别位于最后的几个格子内则将final置1，弹框显示‘xxx色的玩家获胜’
+        #另外需要希纯修改的：
+            #每次需要先让用户看到本轮骰子再显示弹框让用户选择
+            #将叠子棋子用方形图片代替，图片已经上传在image文件夹里（稍有些难需要考虑一下）
+
         elif turn == 1:
             options=getOptions(step,'hippo',hippo_chess)
             num=int(selectOption(options,hippo_chess))
