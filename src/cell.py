@@ -27,5 +27,13 @@ class cell:
             return chess
         else:
             return None
-    def checkCollide(self):
-        pass
+    def checkCollide(self,chess):
+        cur=chess.cur_cell
+        if len(cur.cur_chess)>1:
+            all_chess=[]
+            for chess1 in cur.cur_chess:
+                if chess1.chess_type!=chess.chess_type:
+                    all_chess.append(chess1)
+            if all_chess!=[]:
+                return all_chess
+        return None

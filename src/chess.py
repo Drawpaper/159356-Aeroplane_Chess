@@ -16,4 +16,3 @@ class chess:
     def takeOff(self,index):
         self.sum=0
         self.cur_cell=self.chess_map[index]
-        # self.update(self.cur_cell)

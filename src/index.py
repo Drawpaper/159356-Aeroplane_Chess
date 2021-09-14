@@ -56,18 +56,22 @@ chicken_airport,hippo_airport,parrot_airport,duck_airport=getAirport()
 chicken_chess = [chess('chick',i+1, chicken_airport) for i in range(4)] #第1，2，3，4个棋子
 for i in range(4):
     chicken_chess[i].cur_cell=chicken_airport[i]
+    chicken_airport[i].cur_chess.append(chicken_chess[i])
 #蓝色
 hippo_chess = [chess('hippo',i+1, hippo_airport) for i in range(4)]
 for i in range(4):
     hippo_chess[i].cur_cell=hippo_airport[i]
+    hippo_airport[i].cur_chess.append(hippo_chess[i])
 #红色
 parrot_chess = [chess('parrot',i+1, parrot_airport) for i in range(4)]
 for i in range(4):
     parrot_chess[i].cur_cell=parrot_airport[i]
+    parrot_airport[i].cur_chess.append(parrot_chess[i])
 #绿色
 duck_chess = [chess('duck',i+1, duck_airport) for i in range(4)]
 for i in range(4):
     duck_chess[i].cur_cell=duck_airport[i]
+    duck_airport[i].cur_chess.append(duck_chess[i])
 
 #后来需要去掉，现在这样可以让程序运行起来，之后要使用每个chess中的sum
 sum_1 = 0
@@ -79,7 +83,6 @@ def gameControl():
     global turn,sum_1,sum_2,sum_3,sum_4
 
     step = random.randint(1, 6)#得到随机扔色子数
-    # step = 1
 
     if state == 'START':
         canvas.blit(start, (0, 0))
@@ -145,11 +148,6 @@ def gameControl():
             #     # canvas.blit(gameover, (40, 340))
             #     final = 1
 
-        #此部分做替换
-        # drawPlayer(chicken, sum_1)
-        # drawPlayer(hippo, sum_2)
-        # drawPlayer(parrot, sum_3)
-        # drawPlayer(duck, sum_4)
         for i in range(len(chicken_chess)):
             if chicken_chess[i].sum!=None:
                 drawPlayer(chicken_chess[i].chess_type, chicken_chess[i].sum)

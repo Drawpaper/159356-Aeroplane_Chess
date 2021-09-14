@@ -160,13 +160,13 @@ def getAirport():
 # 画玩家方法
 def drawPlayer(name, po):
     if name == 'chick':
-        canvas.blit(chicken, chicken_map[po].position)
+        canvas.blit(chicken, tuple(chicken_map[po].position))
     if name == 'hippo':
-        canvas.blit(hippo, hippo_map[po].position)
+        canvas.blit(hippo, tuple(hippo_map[po].position))
     if name == 'parrot':
-        canvas.blit(parrot, parrot_map[po].position)
+        canvas.blit(parrot, tuple(parrot_map[po].position))
     if name == 'duck':
-        canvas.blit(duck, duck_map[po].position)
+        canvas.blit(duck, tuple(duck_map[po].position))
     pygame.display.update()
 
 #画起点方法
@@ -190,7 +190,6 @@ for i in range(1, 7):
 # 以step(1-6的随机数/掷色子的结果)为输入，找到对应的骰子图像显示在屏幕上（需要把页面变宽 能够放下一个筛子的图像）
 def drawDial(step):
     canvas.blit(dials[step-1], [737,0])
-
 
 
 # 1.输入：①step，②当前轮棋子的类别,③该类棋子list
@@ -289,6 +288,11 @@ def selectOption(options,chesslist):
 #一个函数以用户所选棋子的类为输入，判断棋子的位置（通过判断棋子的sum或cur_cell）
     #若为none则为起始点，则执行chess中的起飞函数。该函数使当前棋子移动到该棋子路线上的第一个cell，并更新此cell的信息
     #若不为none则为普通点，则根据调用当前棋子的地图与sum判断前进后的cell，返回该cell
+
+        #调用该cell中的checkCollide函数判断是否有与当前棋子颜色不同的其他棋子在此cell中
+            #若有则返回这些棋子（注意：可能会有多个相同颜色的棋子在一个cell中），并将这些棋子的类初始化（置于起飞点）
+            #若无则返回none
+
         #调用该cell中的checkJump与checkFly函数。这两个函数以当前chess为输入判断是否该chess是否可以跳棋或飞棋若能返回最终cell，不能返回None
         #根据得到的最终位置的cell更新当前chess中的sum与cur_cell信息,并更新最终cell与之前cell中cur_chess的信息
 
@@ -299,6 +303,8 @@ def determineOption(step,num,chesslist):
         chessNow=chesslist[num-1]
         if chessNow.sum==None:
             chessNow.takeOff(num-1)
+            c=chesslist[num-1].cur_cell
+            c.cur_chess=[]
             #更新cell的信息
             if chessNow.chess_type=='chick':
                 chessNow.cur_cell=cell_map[16]
@@ -312,48 +318,92 @@ def determineOption(step,num,chesslist):
             else:
                 chessNow.cur_cell=cell_map[3]
                 cell_map[3].cur_chess.append(chessNow)
-            chessNow.update(chessNow.cur_cell)
+            collide(chessNow)
+            # chessNow.update(chessNow.cur_cell)
+
         else:
             chessNow.sum+=step
             for i in range(len(cell_map)):
                 if chessNow.cur_cell==cell_map[i]:
+                    chessNow.cur_cell.deleteCurrentChess(chessNow)
                     if i+step<=51:
                         chessNow.cur_cell=cell_map[i+step]
                         cell_map[i+step].cur_chess.append(chessNow)
                     else:
-                        chessNow.cur_cell=cell_map[i+step-50]
-                        cell_map[i+step-50].cur_chess.append(chessNow)
+                        chessNow.cur_cell=cell_map[i+step-52]
+                        cell_map[i+step-52].cur_chess.append(chessNow)
                     break
-            chessNow.update(chessNow.cur_cell)
+            collide(chessNow)
+            # chessNow.update(chessNow.cur_cell)
+
             #跳棋
             jumpchess=chessNow.cur_cell.checkJump(chessNow)
             if jumpchess!=None:
                 chessNow=jumpchess
                 for i in range(len(cell_map)):
                     if chessNow.cur_cell==cell_map[i]:
+                        chessNow.cur_cell.deleteCurrentChess(chessNow)
                         if i+4<=51:
                             chessNow.cur_cell=cell_map[i+4]
                             cell_map[i+4].cur_chess.append(chessNow)
                         else:
-                            chessNow.cur_cell=cell_map[i+4-50]
-                            cell_map[i+4-50].cur_chess.append(chessNow)
+                            chessNow.cur_cell=cell_map[i+4-52]
+                            cell_map[i+4-52].cur_chess.append(chessNow)
                         break
-                chessNow.update(chessNow.cur_cell)
+                collide(chessNow)
+                # chessNow.update(chessNow.cur_cell)
+
             #飞棋
             flychess=chessNow.cur_cell.checkFly(chessNow)
             if flychess!=None:
                 chessNow=flychess
                 for i in range(len(cell_map)):
                     if chessNow.cur_cell==cell_map[i]:
+                        chessNow.cur_cell.deleteCurrentChess(chessNow)
                         if i+12<=51:
                             chessNow.cur_cell=cell_map[i+12]
                             cell_map[i+12].cur_chess.append(chessNow)
                         else:
-                            chessNow.cur_cell=cell_map[i+12-50]
-                            cell_map[i+12-50].cur_chess.append(chessNow)
+                            chessNow.cur_cell=cell_map[i+12-52]
+                            cell_map[i+12-52].cur_chess.append(chessNow)
                         break
-                chessNow.update(chessNow.cur_cell)
+                collide(chessNow)
+                # chessNow.update(chessNow.cur_cell)
+
         return chessNow.sum
+
+#撞子,将其他棋子初始化
+def collide(chess):
+    c=chess.cur_cell
+    collidechess=c.checkCollide(chess)
+    if collidechess != None:
+        for chess1 in collidechess:
+            chess1.sum = None
+            c.cur_chess.remove(chess1)
+            if chess1.chess_type=='chick':
+                for x in chicken_airport:
+                    if x.cur_chess==[]:
+                        chess1.cur_cell=x
+                        x.cur_chess.append(chess1)
+                        break
+            elif chess1.chess_type=='hippo':
+                for x in hippo_airport:
+                    if x.cur_chess==[]:
+                        chess1.cur_cell=x
+                        x.cur_chess.append(chess1)
+                        break
+            elif chess1.chess_type=='parrot':
+                for x in parrot_airport:
+                    if x.cur_chess==[]:
+                        chess1.cur_cell=x
+                        x.cur_chess.append(chess1)
+                        break
+            else:
+                for x in duck_airport:
+                    if x.cur_chess==[]:
+                        chess1.cur_cell=x
+                        x.cur_chess.append(chess1)
+                        break
 
 def chosenChess(step,color):
     return []
