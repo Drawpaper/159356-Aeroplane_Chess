@@ -29,15 +29,26 @@ row = 30
 start = pygame.image.load('images/start.png')
 bg = pygame.image.load('images/bg.png')
 end = pygame.image.load('images/gameover.png')
+
 chicken = pygame.image.load('images/chick.png')
 chicken = pygame.transform.scale(chicken, (37, 37))
+chicken_square = pygame.image.load('images/chick_square.png') # 迭子图片
+chicken_square= pygame.transform.scale(chicken_square, (37, 37))
+
 duck = pygame.image.load('images/duck.png')
 duck = pygame.transform.scale(duck, (37, 37))
+duck_square = pygame.image.load('images/duck_square.png') # 迭子图片
+duck_square = pygame.transform.scale(duck_square, (37, 37))
+
 hippo = pygame.image.load('images/hippo.png')
 hippo = pygame.transform.scale(hippo, (37, 37))
+hippo_square = pygame.image.load('images/hippo_square.png') # 迭子图片
+hippo_square = pygame.transform.scale(hippo_square, (37, 37))
+
 parrot = pygame.image.load('images/parrot.png')
 parrot = pygame.transform.scale(parrot, (37, 37))
-
+parrot_square = pygame.image.load('images/parrot_square.png') # 迭子图片
+parrot_square = pygame.transform.scale(parrot_square, (37, 37))
 
 # 每格位置数组
 a_map = [[311, 635], [273, 635], [231, 620], [213, 578], [213, 541], [235, 499], [198, 469], [156, 484], [
@@ -80,6 +91,7 @@ for i in range(len(a_map)):
     fly_po = []
     color = ""
     a_cell = cell(position, jump_po, fly_po, color)
+    a_cell.cur_chess = []
     cell_map.append(a_cell)
 
 for i in range(len(cell_map)):
@@ -119,24 +131,29 @@ chicken_end=[]
 hippo_end=[]
 parrot_end=[]
 duck_end=[]
-for c in [[118,351],[156,351],[194,351],[233,351],[271,351],[315,351]]:
+chicken_end_pos=[[118,351],[156,351],[194,351],[233,351],[271,351],[315,351]]
+hippo_end_pos=[[349,125],[349,161],[349,199],[349,237],[349,275],[349,317]]
+parrot_end_pos=[[582,351],[543,351],[504,351],[466,351],[428,351],[383,351]]
+duck_end_pos=[[349,579],[349,542],[349,504],[349,467],[349,428],[349,384]]
+for c in chicken_end_pos:
     newcell= cell(c,None,None,'yellow')
     chicken_end.append(newcell)
-for h in [[349,125],[349,161],[349,199],[349,237],[349,275],[349,317]]:
+for h in hippo_end_pos:
     newcell= cell(h,None,None,'blue')
     hippo_end.append(newcell)
-for p in [[582,351],[543,351],[504,351],[466,351],[428,351],[383,351]]:
+for p in parrot_end_pos:
     newcell= cell(p,None,None,'red')
     parrot_end.append(newcell)
-for d in [[349,579],[349,542],[349,504],[349,467],[349,428],[349,384]]:
+for d in duck_end_pos:
     newcell= cell(d,None,None,'green')
     duck_end.append(newcell)
 
+
 # 不同棋子各自的外围+终点路线
-chicken_map_pos = a_map[16:] + a_map[:13] + [[118,351],[156,351],[194,351],[233,351],[271,351],[315,351]]
-hippo_map_pos = a_map[29:] + a_map[:26] + [[349,125],[349,161],[349,199],[349,237],[349,275],[349,317]]
-parrot_map_pos = a_map[-10:] + a_map[:-13] + [[582,351],[543,351],[504,351],[466,351],[428,351],[383,351]]
-duck_map_pos = a_map[3:] + [[349,579],[349,542],[349,504],[349,467],[349,428],[349,384]]
+chicken_map_pos = a_map[16:] + a_map[:13] + chicken_end_pos
+hippo_map_pos = a_map[29:] + a_map[:26] + hippo_end_pos
+parrot_map_pos = a_map[-10:] + a_map[:-13] + parrot_end_pos
+duck_map_pos = a_map[3:] + duck_end_pos
 
 chicken_map = cell_map[16:] + cell_map[:13] + chicken_end
 hippo_map = cell_map[29:] + cell_map[:26] + hippo_end
@@ -160,13 +177,29 @@ def getAirport():
 # 画玩家方法
 def drawPlayer(name, po):
     if name == 'chick':
-        canvas.blit(chicken, tuple(chicken_map[po].position))
+        if len(chicken_map[po].cur_chess)>1:# 若当前cell有迭子情况（有多个同种类型棋子），则画chicken_square.png
+            canvas.blit(chicken_square, tuple(chicken_map[po].position))
+        else:
+            canvas.blit(chicken, tuple(chicken_map[po].position))
+
     if name == 'hippo':
-        canvas.blit(hippo, tuple(hippo_map[po].position))
+        if len(hippo_map[po].cur_chess)>1:
+            canvas.blit(hippo_square, tuple(hippo_map[po].position))
+        else:
+            canvas.blit(hippo, tuple(hippo_map[po].position))
+
     if name == 'parrot':
-        canvas.blit(parrot, tuple(parrot_map[po].position))
+        if len(parrot_map[po].cur_chess)>1:
+            canvas.blit(parrot_square, tuple(parrot_map[po].position))
+        else:
+            canvas.blit(parrot, tuple(parrot_map[po].position))
+
     if name == 'duck':
-        canvas.blit(duck, tuple(duck_map[po].position))
+        if len(duck_map[po].cur_chess)>1:
+            canvas.blit(duck_square, tuple(duck_map[po].position))
+        else:
+            canvas.blit(duck, tuple(duck_map[po].position))
+
     pygame.display.update()
 
 #画起点方法
@@ -198,16 +231,20 @@ def drawDial(step):
 #   ②判断在地图上已出发的棋子有几个，是否在step步后未超出终点，若未超出则作为选择之一，若step数大于其到达终点的格数此棋子不可选
 # 3.返回：可选棋子的chess_num，即该棋子在该类棋子list中的（index+1）（多个options）
 # e.g.  getOptions(2,'chick',chicken_chess)
+# 增添条件: step数之内的cell（不包括最终的cell）若有cell有 [两个或两个以上] 的 [其他颜色] 的相同颜色棋子（叠子）则当前棋子也不能被选择
 def getOptions(step,chesstype,chesslist):
-
     if chesstype=='chick':
         chessmap=chicken_map_pos
+        map=chicken_map
     elif chesstype=='hippo':
         chessmap=hippo_map_pos
+        map=hippo_map
     elif chesstype=='parrot':
         chessmap=parrot_map_pos
+        map=parrot_map
     else:
         chessmap=duck_map_pos
+        map=duck_map
 
     options=[]
     for a_piece in chesslist:
@@ -218,7 +255,16 @@ def getOptions(step,chesstype,chesslist):
                 options.append(a_piece.chess_num)
         else:
             index=chessmap.index(pos)
-            if (index+step+1) <= len(chessmap): # 若step数大于其到达终点的格数，此棋子不可选
+
+            pass_num=0
+            for s in range(1,step):
+                checked_cell=map[index+s]
+                if len(checked_cell.cur_chess)>1 and checked_cell.cur_chess[0].chess_type!=chesstype: #（step-1）数内的cell中，无敌方迭子
+                    pass
+                else:
+                    pass_num=pass_num+1
+
+            if (index+step+1) <= len(chessmap) and pass_num==step-1: # 若step数大于其到达终点的格数，此棋子不可选
                 options.append(a_piece.chess_num)
 
     return options
@@ -407,3 +453,35 @@ def collide(chess):
 
 def chosenChess(step,color):
     return []
+
+
+# 输入：当前轮棋子的类别;该类棋子list
+# 判断4个棋子是否全部都到达最后几个格子，若全部到达，出现弹框显示赢家，并返回1；否则，无弹框，返回0。
+def findWinner(chesstype,chesslist):
+
+    if chesstype=='chick':
+        endmap=chicken_end_pos
+    elif chesstype=='hippo':
+        endmap=hippo_end_pos
+    elif chesstype=='parrot':
+        endmap=parrot_end_pos
+    else:
+        endmap=duck_end_pos
+
+    end_num=0
+    for c in chesslist:
+        p=c.cur_cell.position
+        if p in endmap: # 到达最后几个格子
+            end_num=end_num+1
+
+    if end_num == 4: # 4个棋子全部都到达最后几个格子
+        root = tk.Tk()
+        root.title(" W I N N E R ")
+        root.geometry('500x200')
+        winner=chesstype
+        messagebox.showinfo(" congratulations ", winner+" are the winner !!!!! ")
+        root.quit()
+        root.destroy()
+        return 1
+    else:
+        return 0

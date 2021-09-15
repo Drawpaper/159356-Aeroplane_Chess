@@ -1,4 +1,6 @@
 class cell:
+    savelist=[]
+
     def __init__(self, position, jump_po, fly_po, color):
         self.position = position
         #跳棋的cell,不能跳棋为[]
@@ -7,6 +9,13 @@ class cell:
         self.fly_po = fly_po
         self.color = color
         self.cur_chess = []
+        cell.savelist.append(self)
+
+    # def find(position): # 根据position找到对应的实例，即可以通过position这一属性值查询该对象的其他属性值
+    #     for c in cell.savelist:
+    #         if c.position == position:
+    #             return c
+
     def addChess(self,chess):
         self.cur_chess.append(chess)
     def deleteCurrentChess(self,chess):

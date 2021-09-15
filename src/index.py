@@ -16,8 +16,13 @@ from func import getOptions
 from func import selectOption
 from func import determineOption
 from func import getAirport
+from func import findWinner
 from chess import *
 from cell import *
+
+
+import time
+
 
 pygame.init()
 # 窗口定位
@@ -79,8 +84,25 @@ sum_2 = 0
 sum_3 = 0
 sum_4 = 0
 
+def drawAllchess():
+    # 为了先显示色子数字再让玩家做出选择，使用pygame.display.update()，但这使得选择棋子时棋盘被清空，
+    # 玩家无法看着棋盘中的棋子位置做出选择，所以将原在gameControl()中部分代码封装，在更新画面前将所有棋子画出
+        for i in range(len(chicken_chess)):
+            if chicken_chess[i].sum!=None:
+                drawPlayer(chicken_chess[i].chess_type, chicken_chess[i].sum)
+        for i in range(len(hippo_chess)):
+            if hippo_chess[i].sum!=None:
+                drawPlayer(hippo_chess[i].chess_type, hippo_chess[i].sum)
+        for i in range(len(parrot_chess)):
+            if parrot_chess[i].sum!=None:
+                drawPlayer(parrot_chess[i].chess_type, parrot_chess[i].sum)
+        for i in range(len(duck_chess)):
+            if duck_chess[i].sum!=None:
+                drawPlayer(duck_chess[i].chess_type, duck_chess[i].sum)
+
+
 def gameControl():
-    global turn,sum_1,sum_2,sum_3,sum_4
+    global turn,sum_1,sum_2,sum_3,sum_4,final
 
     step = random.randint(1, 6)#得到随机扔色子数
 
@@ -92,7 +114,12 @@ def gameControl():
     elif state == 'RUNNING':
         canvas.blit(bg, (0, 0))
         startpoint()
+
         drawDial(step)
+        drawAllchess()
+        pygame.display.update()
+        time.sleep(0.16)
+
         if turn == 0:
             #随机摇骰子->判断骰子点数->判断当前可选骰子->玩家选择棋子->判断当前棋子位置->计算棋子前进位置：起飞、跳、飞
             #希纯：
@@ -100,7 +127,7 @@ def gameControl():
             # drawDial(step)
 
             #一个函数以step与当前轮棋子的类为输入，判断骰子点数选择可选棋子 返回可选棋子的类（注意若step数大于其到达终点的格数此棋子不可选）（多个）
-##################(修改)step数之内的cell（不包括最终的cell）若有cell有两个或两个以上的其他颜色的相同颜色棋子（叠子）则当前棋子也不能被选择
+##################(修改)step数之内的cell（不包括最终的cell）若有cell有两个或两个以上的其他颜色的相同颜色棋子（叠子）则当前棋子也不能被选择【√】
 
             # ② options=getOptions(2,'chick',chicken_chess) ！！！cur_cell未解决！！！ 具体解释见func.py
 
@@ -109,6 +136,10 @@ def gameControl():
             options=getOptions(step,'chick',chicken_chess)
             num=int(selectOption(options,chicken_chess))
             cur_sum=determineOption(step,num,chicken_chess)
+
+            final=findWinner('chick',chicken_chess)
+            if final==1:
+                return
 
             #莹莹：
             #一个函数以用户所选棋子的类为输入，判断棋子的位置（通过判断棋子的sum或cur_cell）
@@ -124,42 +155,43 @@ def gameControl():
                     #根据得到的最终位置的cell更新当前chess中的sum与cur_cell信息,并更新最终cell与之前cell中cur_chess的信息
 
             #希纯：
-#############（修改，增加）判断当前类别所有棋子的位置，若分别位于最后的几个格子内则将final置1，弹框显示‘xxx色的玩家获胜’
+#############（修改，增加）判断当前类别所有棋子的位置，若分别位于最后的几个格子内则将final置1，弹框显示‘xxx色的玩家获胜’【√】
+
+
         #另外需要希纯修改的：
-            #每次需要先让用户看到本轮骰子再显示弹框让用户选择
-            #将叠子棋子用方形图片代替，图片已经上传在image文件夹里（稍有些难需要考虑一下）
+            #每次需要先让用户看到本轮骰子再显示弹框让用户选择  【√】
+            #将叠子棋子用方形图片代替，图片已经上传在image文件夹里（稍有些难需要考虑一下）【√】
 
         elif turn == 1:
             options=getOptions(step,'hippo',hippo_chess)
             num=int(selectOption(options,hippo_chess))
             cur_sum=determineOption(step,num,hippo_chess)
+            final=findWinner('hippo',hippo_chess)
+            if final==1:
+                return
         elif turn == 2:
             options=getOptions(step,'parrot',parrot_chess)
             num=int(selectOption(options,parrot_chess))
             cur_sum=determineOption(step,num,parrot_chess)
+            final=findWinner('parrot',parrot_chess)
+            if final==1:
+                return
         elif turn == 3:
             options=getOptions(step,'duck',duck_chess)
             num=int(selectOption(options,duck_chess))
             cur_sum=determineOption(step,num,duck_chess)
+            final=findWinner('duck',duck_chess)
+            if final==1:
+                return
 
             # if sum_4 < 60:
             #     pass
             # else:
             #     # canvas.blit(gameover, (40, 340))
             #     final = 1
+        drawAllchess()
 
-        for i in range(len(chicken_chess)):
-            if chicken_chess[i].sum!=None:
-                drawPlayer(chicken_chess[i].chess_type, chicken_chess[i].sum)
-        for i in range(len(hippo_chess)):
-            if hippo_chess[i].sum!=None:
-                drawPlayer(hippo_chess[i].chess_type, hippo_chess[i].sum)
-        for i in range(len(parrot_chess)):
-            if parrot_chess[i].sum!=None:
-                drawPlayer(parrot_chess[i].chess_type, parrot_chess[i].sum)
-        for i in range(len(duck_chess)):
-            if duck_chess[i].sum!=None:
-                drawPlayer(duck_chess[i].chess_type, duck_chess[i].sum)
+
 
     elif state == 'END':
         canvas.blit(end, (0, 0))
