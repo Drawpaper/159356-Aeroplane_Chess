@@ -199,7 +199,6 @@ def drawPlayer(name, po):
             canvas.blit(duck_square, tuple(duck_map[po].position))
         else:
             canvas.blit(duck, tuple(duck_map[po].position))
-
     pygame.display.update()
 
 #画起点方法

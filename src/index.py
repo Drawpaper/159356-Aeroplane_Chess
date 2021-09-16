@@ -100,7 +100,6 @@ def drawAllchess():
             if duck_chess[i].sum!=None:
                 drawPlayer(duck_chess[i].chess_type, duck_chess[i].sum)
 
-
 def gameControl():
     global turn,sum_1,sum_2,sum_3,sum_4,final
 
@@ -116,8 +115,9 @@ def gameControl():
         startpoint()
 
         drawDial(step)
-        drawAllchess()
         pygame.display.update()
+
+        drawAllchess()
         time.sleep(0.16)
 
         if turn == 0:
@@ -189,12 +189,14 @@ def gameControl():
             # else:
             #     # canvas.blit(gameover, (40, 340))
             #     final = 1
+        canvas.blit(bg, (0, 0))
+        startpoint()
         drawAllchess()
-
-
 
     elif state == 'END':
         canvas.blit(end, (0, 0))
+
+    pygame.display.update()
 
 #画原始的4枚棋子
 def startpoint():
