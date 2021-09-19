@@ -125,26 +125,26 @@ class TestFunction(unittest.TestCase):
     def test_determineOption_1(self): #起飞
         chess1=self.chicken_chess[0]
         determineOption(1,1,self.chicken_chess)
-        self.assertEqual(chess1.sum,0)
-        self.assertNotEqual(chess1.cur_cell,self.cell1)
+        self.assertEqual(chess1.sum,0,msg="test_determineOption_1 was failed.")
+        self.assertNotEqual(chess1.cur_cell,self.cell1,msg="test_determineOption_1 was failed.")
     def test_determineOption_2(self): #跳一步
         chess1=self.chicken_chess[0]
         chess1.sum=0
         determineOption(1,1,self.chicken_chess)
-        self.assertEqual(chess1.sum,1)
-        self.assertNotEqual(chess1.cur_cell,self.cell1)
+        self.assertEqual(chess1.sum,1,msg="test_determineOption_2 was failed.")
+        self.assertNotEqual(chess1.cur_cell,self.cell1,msg="test_determineOption_2 was failed.")
     def test_determineOption_3(self): #jump
         chess1=self.chicken_chess[3]
         chess1.sum=0
         determineOption(2,4,self.chicken_chess)
-        self.assertEqual(chess1.sum,8)
-        self.assertNotEqual(chess1.cur_cell,self.cell1)
+        self.assertEqual(chess1.sum,6,msg="test_determineOption_3 was failed.")
+        self.assertNotEqual(chess1.cur_cell,self.cell1,msg="test_determineOption_3 was failed.")
     def test_determineOption_4(self): #fly
         chess1=self.chicken_chess[4]
         chess1.sum=0
         determineOption(1,5,self.chicken_chess)
-        self.assertEqual(chess1.sum,13)
-        self.assertNotEqual(chess1.cur_cell,self.cell1)
+        self.assertEqual(chess1.sum,13,msg="test_determineOption_4 was failed.")
+        self.assertNotEqual(chess1.cur_cell,self.cell1,msg="test_determineOption_4 was failed.")
 
 if __name__ == '__main__':
     unittest.main()
