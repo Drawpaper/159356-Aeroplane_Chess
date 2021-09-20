@@ -1,7 +1,7 @@
 class chess:
     def __init__(self, chess_type, chess_num, chess_map):
-        self.sum = None   #棋子走的总步数
-        self.cur_cell = None   #棋子当前位置
+        self.sum = None   # 棋子走的总步数
+        self.cur_cell = None   # 棋子当前位置
         self.chess_type = chess_type
         self.chess_num = chess_num
         self.chess_map = chess_map

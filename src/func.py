@@ -8,7 +8,7 @@ import random
 import time
 from pygame.locals import *
 from sys import exit
-from  cell import *
+from cell import *
 import chess
 
 import tkinter as tk
@@ -149,6 +149,7 @@ for d in duck_end_pos:
     duck_end.append(newcell)
 
 
+
 # 不同棋子各自的外围+终点路线
 chicken_map_pos = a_map[16:] + a_map[:13] + chicken_end_pos
 hippo_map_pos = a_map[29:] + a_map[:26] + hippo_end_pos
@@ -254,17 +255,19 @@ def getOptions(step,chesstype,chesslist):
                 options.append(a_piece.chess_num)
         else:
             index=chessmap.index(pos)
+            if (index+step+1) > len(chessmap):
+                pass
+            else:
+                pass_num=0
+                for s in range(1,step):
+                    checked_cell=map[index+s]
+                    if len(checked_cell.cur_chess)>1 and checked_cell.cur_chess[0].chess_type!=chesstype: #（step-1）数内的cell中，无敌方迭子
+                        pass
+                    else:
+                        pass_num=pass_num+1
 
-            pass_num=0
-            for s in range(1,step):
-                checked_cell=map[index+s]
-                if len(checked_cell.cur_chess)>1 and checked_cell.cur_chess[0].chess_type!=chesstype: #（step-1）数内的cell中，无敌方迭子
-                    pass
-                else:
-                    pass_num=pass_num+1
-
-            if (index+step+1) <= len(chessmap) and pass_num==step-1: # 若step数大于其到达终点的格数，此棋子不可选
-                options.append(a_piece.chess_num)
+                if  pass_num==step-1: # 若step数大于其到达终点的格数，此棋子不可选
+                    options.append(a_piece.chess_num)
 
     return options
 
@@ -484,3 +487,6 @@ def findWinner(chesstype,chesslist):
         return 1
     else:
         return 0
+
+
+

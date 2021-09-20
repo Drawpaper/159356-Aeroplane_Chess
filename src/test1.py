@@ -9,8 +9,8 @@ import random
 import time
 from pygame.locals import *
 from sys import exit
-from  cell import *
-import chess
+from  src.cell import *
+from  src.chess import *
 
 import tkinter as tk
 from  tkinter import messagebox
@@ -255,17 +255,19 @@ def getOptions(step,chesstype,chesslist):
                 options.append(a_piece.chess_num)
         else:
             index=chessmap.index(pos)
+            if (index+step+1) > len(chessmap):
+                pass
+            else:
+                pass_num=0
+                for s in range(1,step):
+                    checked_cell=map[index+s]
+                    if len(checked_cell.cur_chess)>1 and checked_cell.cur_chess[0].chess_type!=chesstype: #（step-1）数内的cell中，无敌方迭子
+                        pass
+                    else:
+                        pass_num=pass_num+1
 
-            pass_num=0
-            for s in range(1,step):
-                checked_cell=map[index+s]
-                if len(checked_cell.cur_chess)>1 and checked_cell.cur_chess[0].chess_type!=chesstype: #（step-1）数内的cell中，无敌方迭子
-                    pass
-                else:
-                    pass_num=pass_num+1
-
-            if (index+step+1) <= len(chessmap) and pass_num==step-1: # 若step数大于其到达终点的格数，此棋子不可选
-                options.append(a_piece.chess_num)
+                if pass_num==step-1: # 若step数大于其到达终点的格数，此棋子不可选
+                    options.append(a_piece.chess_num)
 
     return options
 
@@ -511,3 +513,6 @@ def get_Airport_Chess():
         duck_chess[i].cur_cell=duck_airport[i]
         duck_airport[i].cur_chess.append(duck_chess[i])
     return chicken_chess,hippo_chess,parrot_chess,duck_chess
+
+
+

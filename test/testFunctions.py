@@ -3,11 +3,15 @@ import sys
 sys.path.append('../src/images/')
 sys.path.append('../src/')
 
-from test1 import collide
-from test1 import get_Airport_Chess
-from test1 import determineOption
-from cell import *
-from chess import *
+from src.test1 import collide
+from src.test1 import get_Airport_Chess
+from src.test1 import determineOption
+from src.test1 import getMap
+from src.test1 import getAirport
+from src.test1 import getOptions
+from src.test1 import findWinner
+from src.cell import *
+from src.chess import *
 
 class TestFunction(unittest.TestCase):
     def setUp(self):
@@ -22,7 +26,7 @@ class TestFunction(unittest.TestCase):
         self.chessmap.append(self.cell3)
         self.chessmap.append(self.cell4)
         self.chessmap.append(self.cell5)
-        self.chicken_chess = [chess('chick',i+1, self.chessmap) for i in range(5)] #第1，2，3,4个棋子
+        self.chicken_chess = [chess('chick',i+1, self.chessmap) for i in range(5)] #第1，2，3, 4个棋子
         for i in range(5):
             self.chicken_chess[i].cur_cell=self.chessmap[i]
             self.chessmap[i].cur_chess.append(self.chicken_chess[i])
@@ -128,9 +132,9 @@ class TestFunction(unittest.TestCase):
         self.assertEqual(chess1.sum,0,msg="test_determineOption_1 was failed.")
         self.assertNotEqual(chess1.cur_cell,self.cell1,msg="test_determineOption_1 was failed.")
     def test_determineOption_2(self): #跳一步
-        chess1=self.chicken_chess[0]
+        chess1=self.chicken_chess[1]
         chess1.sum=0
-        determineOption(1,1,self.chicken_chess)
+        determineOption(1,2,self.chicken_chess)
         self.assertEqual(chess1.sum,1,msg="test_determineOption_2 was failed.")
         self.assertNotEqual(chess1.cur_cell,self.cell1,msg="test_determineOption_2 was failed.")
     def test_determineOption_3(self): #jump
@@ -145,6 +149,109 @@ class TestFunction(unittest.TestCase):
         determineOption(1,5,self.chicken_chess)
         self.assertEqual(chess1.sum,13,msg="test_determineOption_4 was failed.")
         self.assertNotEqual(chess1.cur_cell,self.cell1,msg="test_determineOption_4 was failed.")
+
+
+    # 测试以下三个要点：
+    #   1.如果掷色子数step为6，增加飞机场的棋子起飞这一选择
+    #   2.判断在地图上已出发的棋子有几个，是否在step步后未超出终点，若未超出则作为选择之一，若step数大于其到达终点的格数此棋子不可选
+    #   3.step数之内的cell（不包括最终的cell）若有cell有 [两个或两个以上] 的 [其他颜色] 的相同颜色棋子（叠子）则当前棋子也不能被选择
+    def test_getOptions(self):
+
+        chicken_map,hippo_map,parrot_map,duck_map = getMap()
+        chicken_airport,hippo_airport,parrot_airport,duck_airport=getAirport()
+
+        chickchess1=chess('chick',1,chicken_map) # 起点
+        chickchess1.cur_cell=chicken_airport[0]
+
+        chickchess2=chess('chick',2,chicken_map) # 在倒数第四个cell
+        chickchess2.cur_cell=chicken_map[-4]
+
+        chickchess4=chess('chick',4,chicken_map) # 在倒数第二个cell
+        chickchess4.cur_cell=chicken_map[-2]
+
+        chickchess3=chess('chick',3,chicken_map) # 在第二个cell
+        chickchess3.cur_cell=chicken_map[2]
+
+        hippochess1=chess('hippo',1,hippo_map) # 两个hippo类型棋子，在chicken_map第三个cell的位置
+        hippochess1.cur_cell=chicken_map[3]
+        hippochess2=chess('hippo',2,hippo_map)
+        hippochess2.cur_cell=chicken_map[3]
+        chicken_map[3].cur_chess=[hippochess1,hippochess2] # 在chicken_map第三个cell的位置，hippo类型棋子 ----> 迭子
+
+        chesslist=[chickchess1,chickchess2,chickchess3,chickchess4]
+
+        # 预期结果：
+        # 测试1：step=1 , chickenchess  [2,3,4]
+        # 测试2：step=2 ，chickenchess  [2]
+        # 测试3：step=3 , chickenchess  [2]
+        # 测试4：step=4 , chickenchess  []
+        # 测试5：step=5 ，chickenchess  []
+        # 测试6：step=6 , chickenchess  [1]
+
+        options1=getOptions(1,'chick',chesslist)# 测试1
+        self.assertEqual(options1,[2,3,4])
+
+        options2=getOptions(2,'chick',chesslist)# 测试2
+        self.assertEqual(options2,[2])
+
+        options3=getOptions(3,'chick',chesslist)# 测试3
+        self.assertEqual(options3,[2])
+
+        options4=getOptions(4,'chick',chesslist)# 测试4
+        self.assertEqual(options4,[])
+
+        options5=getOptions(5,'chick',chesslist)# 测试5
+        self.assertEqual(options5,[])
+
+        options6=getOptions(6,'chick',chesslist)# 测试6
+        self.assertEqual(options6,[1])
+
+
+    # chick是赢家，函数返回1
+    def test_findWinner_1(self):
+        chicken_map,hippo_map,parrot_map,duck_map = getMap()
+
+        # chick棋子【全在】最后几个cell
+        chickchess1=chess('chick',1,chicken_map) # 在倒数第1个cell
+        chickchess1.cur_cell=chicken_map[-1]
+
+        chickchess2=chess('chick',2,chicken_map) # 在倒数第2个cell
+        chickchess2.cur_cell=chicken_map[-2]
+
+        chickchess3=chess('chick',3,chicken_map) # 在倒数第3个cell
+        chickchess3.cur_cell=chicken_map[-3]
+
+        chickchess4=chess('chick',4,chicken_map) # 在倒数第4个cell
+        chickchess4.cur_cell=chicken_map[-4]
+
+        chesslist=[chickchess1,chickchess2,chickchess3,chickchess4]
+
+        result=findWinner('chick',chesslist)
+        self.assertEqual(result,1)
+
+
+    # chick不是赢家，函数返回0
+    def test_findWinner_0(self):
+        chicken_map,hippo_map,parrot_map,duck_map = getMap()
+
+        # chick棋子【不都在】最后几个cell
+        chickchess1=chess('chick',1,chicken_map) # 在倒数第1个cell
+        chickchess1.cur_cell=chicken_map[-1]
+
+        chickchess2=chess('chick',2,chicken_map) # 在倒数第2个cell
+        chickchess2.cur_cell=chicken_map[-2]
+
+        chickchess3=chess('chick',3,chicken_map) # 在第3个cell
+        chickchess3.cur_cell=chicken_map[3]
+
+        chickchess4=chess('chick',4,chicken_map) # 在第4个cell
+        chickchess4.cur_cell=chicken_map[4]
+
+        chesslist=[chickchess1,chickchess2,chickchess3,chickchess4]
+
+        result=findWinner('chick',chesslist)
+        self.assertEqual(result,0)
+
 
 if __name__ == '__main__':
     unittest.main()
