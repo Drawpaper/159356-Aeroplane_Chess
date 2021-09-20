@@ -255,7 +255,7 @@ def getOptions(step,chesstype,chesslist):
                 options.append(a_piece.chess_num)
         else:
             index=chessmap.index(pos)
-            if (index+step+1) > len(chessmap):
+            if (index+step+1) > len(chessmap): # 若step数大于其到达终点的格数，此棋子不可选
                 pass
             else:
                 pass_num=0
@@ -266,7 +266,7 @@ def getOptions(step,chesstype,chesslist):
                     else:
                         pass_num=pass_num+1
 
-                if  pass_num==step-1: # 若step数大于其到达终点的格数，此棋子不可选
+                if  pass_num==step-1:
                     options.append(a_piece.chess_num)
 
     return options
