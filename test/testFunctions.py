@@ -104,18 +104,7 @@ class TestFunction(unittest.TestCase):
         self.assertIsNone(all_chess,msg="test_checkCollide_3 was failed.")
 
     #测试collide
-    def test_collide_1(self):#chess2被初始化
-        a,b,c,d=get_Airport_Chess()
-        b[0].cur_chess=[]
-        chess1=self.chicken_chess[0]
-        chess2=chess('hippo',6, self.chessmap)
-        chess2.sum=0
-        chess2.cur_cell=self.chessmap[0]
-        self.chessmap[0].cur_chess.append(chess2)
-        collide(chess1)
-        self.assertEqual(chess2.sum,None,msg="test_collide_1 was failed.")
-        self.assertEqual(chess2.cur_cell,[],msg="test_collide_1 was failed.")
-    def test_collide_2(self):#颜色相同，不会碰撞 初始化
+    def test_collide(self):#颜色相同，不会碰撞 初始化
         chess1=self.chicken_chess[0]
         chess2=chess('chick',6, self.chessmap)
         chess2.sum=0
