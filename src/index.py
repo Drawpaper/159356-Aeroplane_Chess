@@ -11,6 +11,7 @@ from sys import exit
 from func import drawPlayer
 from func import drawStartPoints
 from func import getMap
+from func import getMappos
 from func import drawDial
 from func import getOptions
 from func import selectOption
@@ -38,11 +39,20 @@ start = pygame.image.load('images/start.png')
 start = pygame.transform.scale(start, (967, 741))
 bg = pygame.image.load('images/bg.png')
 end = pygame.image.load('images/gameover.png')
+# 图片加载2
+chicken = pygame.image.load('images/chick.png')
+chicken = pygame.transform.scale(chicken, (37, 37))
+duck = pygame.image.load('images/duck.png')
+duck = pygame.transform.scale(duck, (37, 37))
+hippo = pygame.image.load('images/hippo.png')
+hippo = pygame.transform.scale(hippo, (37, 37))
+parrot = pygame.image.load('images/parrot.png')
+parrot = pygame.transform.scale(parrot, (37, 37))
 
-chicken = 'chick'
-hippo = 'hippo'
-parrot = 'parrot'
-duck = 'duck'
+# chicken = 'chick'
+# hippo = 'hippo'
+# parrot = 'parrot'
+# duck = 'duck'
 # 设定游戏状态和玩家分数
 state = 'START'
 score_s = 0
@@ -83,22 +93,37 @@ sum_1 = 0
 sum_2 = 0
 sum_3 = 0
 sum_4 = 0
+chicken_map_pos,hippo_map_pos,parrot_map_pos,duck_map_pos=getMappos()
 
 def drawAllchess():
     # 为了先显示色子数字再让玩家做出选择，使用pygame.display.update()，但这使得选择棋子时棋盘被清空，
     # 玩家无法看着棋盘中的棋子位置做出选择，所以将原在gameControl()中部分代码封装，在更新画面前将所有棋子画出
-        for i in range(len(chicken_chess)):
-            if chicken_chess[i].sum!=None:
-                drawPlayer(chicken_chess[i].chess_type, chicken_chess[i].sum)
-        for i in range(len(hippo_chess)):
-            if hippo_chess[i].sum!=None:
-                drawPlayer(hippo_chess[i].chess_type, hippo_chess[i].sum)
-        for i in range(len(parrot_chess)):
-            if parrot_chess[i].sum!=None:
-                drawPlayer(parrot_chess[i].chess_type, parrot_chess[i].sum)
-        for i in range(len(duck_chess)):
-            if duck_chess[i].sum!=None:
-                drawPlayer(duck_chess[i].chess_type, duck_chess[i].sum)
+
+        for i in range(4):#len(chicken_chess)
+            if chicken_chess[i].cur_cell.position in chicken_map_pos:
+                drawPlayer(chicken_chess[i].chess_type, chicken_map_pos.index(chicken_chess[i].cur_cell.position))#.sum
+            # else:
+            #     canvas.blit(chicken,tuple(chicken_chess[i].cur_cell.position))
+
+        for i in range(4):
+            # if hippo_chess[i].sum!=None:
+            if hippo_chess[i].cur_cell.position in hippo_map_pos:
+                drawPlayer(hippo_chess[i].chess_type, hippo_map_pos.index(hippo_chess[i].cur_cell.position))
+            # else:
+            #     canvas.blit(hippo, tuple(hippo_chess[i].cur_cell.position))
+
+        for i in range(4):
+            if parrot_chess[i].cur_cell.position in parrot_map_pos:
+                drawPlayer(parrot_chess[i].chess_type, parrot_map_pos.index(parrot_chess[i].cur_cell.position))
+            # else:
+            #     canvas.blit(parrot, tuple(parrot_chess[i].cur_cell.position))
+
+        for i in range(4):
+            if duck_chess[i].cur_cell.position in duck_map_pos:
+                drawPlayer(duck_chess[i].chess_type, duck_map_pos.index(duck_chess[i].cur_cell.position))
+            # else:
+            #     canvas.blit(duck, tuple(duck_chess[i].cur_cell.position))
+
 
 def gameControl():
     global turn,sum_1,sum_2,sum_3,sum_4,final
@@ -118,6 +143,7 @@ def gameControl():
         pygame.display.update()
 
         drawAllchess()
+        pygame.display.update()
         time.sleep(0.16)
 
         if turn == 0:

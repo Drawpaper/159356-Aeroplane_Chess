@@ -164,6 +164,8 @@ duck_map = cell_map[3:] + duck_end
 # 获取不同棋子的地图
 def getMap():
     return chicken_map,hippo_map,parrot_map,duck_map
+def getMappos():
+    return chicken_map_pos,hippo_map_pos,parrot_map_pos,duck_map_pos
 
 # 获取不同棋子的起点cell，即飞机场内cell
 def getAirport():
