@@ -369,7 +369,6 @@ def determineOption(step,num,chesslist):
                 chessNow.cur_cell=cell_map[3]
                 cell_map[3].cur_chess.append(chessNow)
             collide(chessNow)
-            # chessNow.update(chessNow.cur_cell)
 
         else:
             chessNow.sum+=step
@@ -384,24 +383,6 @@ def determineOption(step,num,chesslist):
                         cell_map[i+step-52].cur_chess.append(chessNow)
                     break
             collide(chessNow)
-            # chessNow.update(chessNow.cur_cell)
-
-            #跳棋
-            jumpchess=chessNow.cur_cell.checkJump(chessNow)
-            if jumpchess!=None:
-                chessNow=jumpchess
-                for i in range(len(cell_map)):
-                    if chessNow.cur_cell==cell_map[i]:
-                        chessNow.cur_cell.deleteCurrentChess(chessNow)
-                        if i+4<=51:
-                            chessNow.cur_cell=cell_map[i+4]
-                            cell_map[i+4].cur_chess.append(chessNow)
-                        else:
-                            chessNow.cur_cell=cell_map[i+4-52]
-                            cell_map[i+4-52].cur_chess.append(chessNow)
-                        break
-                collide(chessNow)
-                # chessNow.update(chessNow.cur_cell)
 
             #飞棋
             flychess=chessNow.cur_cell.checkFly(chessNow)
@@ -418,7 +399,38 @@ def determineOption(step,num,chesslist):
                             cell_map[i+12-52].cur_chess.append(chessNow)
                         break
                 collide(chessNow)
-                # chessNow.update(chessNow.cur_cell)
+
+            #跳棋
+            jumpchess=chessNow.cur_cell.checkJump(chessNow)
+            if jumpchess!=None:
+                chessNow=jumpchess
+                for i in range(len(cell_map)):
+                    if chessNow.cur_cell==cell_map[i]:
+                        chessNow.cur_cell.deleteCurrentChess(chessNow)
+                        if i+4<=51:
+                            chessNow.cur_cell=cell_map[i+4]
+                            cell_map[i+4].cur_chess.append(chessNow)
+                        else:
+                            chessNow.cur_cell=cell_map[i+4-52]
+                            cell_map[i+4-52].cur_chess.append(chessNow)
+                        break
+                collide(chessNow)
+
+            #飞棋
+            flychess=chessNow.cur_cell.checkFly(chessNow)
+            if flychess!=None:
+                chessNow=flychess
+                for i in range(len(cell_map)):
+                    if chessNow.cur_cell==cell_map[i]:
+                        chessNow.cur_cell.deleteCurrentChess(chessNow)
+                        if i+12<=51:
+                            chessNow.cur_cell=cell_map[i+12]
+                            cell_map[i+12].cur_chess.append(chessNow)
+                        else:
+                            chessNow.cur_cell=cell_map[i+12-52]
+                            cell_map[i+12-52].cur_chess.append(chessNow)
+                        break
+                collide(chessNow)
 
         return chessNow.sum
 
