@@ -260,14 +260,14 @@ def getOptions(step,chesstype,chesslist):
                 pass
             else:
                 pass_num=0
-                for s in range(1,step):
+                for s in range(1,step+1):
                     checked_cell=map[index+s]
-                    if len(checked_cell.cur_chess)>1 and checked_cell.cur_chess[0].chess_type!=chesstype: #（step-1）数内的cell中，无敌方迭子
+                    if len(checked_cell.cur_chess)>1 and checked_cell.cur_chess[0].chess_type!=chesstype: #step数内的cell中，无敌方迭子
                         pass
                     else:
                         pass_num=pass_num+1
 
-                if  pass_num==step-1:
+                if  pass_num==step:
                     options.append(a_piece.chess_num)
 
     return options
