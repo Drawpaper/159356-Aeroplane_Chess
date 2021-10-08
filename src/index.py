@@ -98,31 +98,38 @@ chicken_map_pos,hippo_map_pos,parrot_map_pos,duck_map_pos=getMappos()
 def drawAllchess():
     # 为了先显示色子数字再让玩家做出选择，使用pygame.display.update()，但这使得选择棋子时棋盘被清空，
     # 玩家无法看着棋盘中的棋子位置做出选择，所以将原在gameControl()中部分代码封装，在更新画面前将所有棋子画出
+    # print("#############33")
+    for i in range(4):#len(chicken_chess)
+        if chicken_chess[i].sum!=None:
+        # if chicken_chess[i].cur_cell.position in chicken_map_pos:
+        #     print("chick",chicken_chess[i].cur_cell)
+            drawPlayer(chicken_chess[i].chess_type, chicken_map_pos.index(chicken_chess[i].cur_cell.position))#.sum
+        # else:
+        #     canvas.blit(chicken,tuple(chicken_chess[i].cur_cell.position))
 
-        for i in range(4):#len(chicken_chess)
-            if chicken_chess[i].cur_cell.position in chicken_map_pos:
-                drawPlayer(chicken_chess[i].chess_type, chicken_map_pos.index(chicken_chess[i].cur_cell.position))#.sum
-            # else:
-            #     canvas.blit(chicken,tuple(chicken_chess[i].cur_cell.position))
+    for i in range(4):
+        if hippo_chess[i].sum!=None:
+        # if hippo_chess[i].cur_cell.position in hippo_map_pos:
+        #     print("hippo",hippo_chess[i].cur_cell)
+            drawPlayer(hippo_chess[i].chess_type, hippo_map_pos.index(hippo_chess[i].cur_cell.position))
+        # else:
+        #     canvas.blit(hippo, tuple(hippo_chess[i].cur_cell.position))
 
-        for i in range(4):
-            # if hippo_chess[i].sum!=None:
-            if hippo_chess[i].cur_cell.position in hippo_map_pos:
-                drawPlayer(hippo_chess[i].chess_type, hippo_map_pos.index(hippo_chess[i].cur_cell.position))
-            # else:
-            #     canvas.blit(hippo, tuple(hippo_chess[i].cur_cell.position))
+    for i in range(4):
+        if parrot_chess[i].sum!=None:
+        # if parrot_chess[i].cur_cell.position in parrot_map_pos:
+        #     print("parrt",parrot_chess[i].cur_cell)
+            drawPlayer(parrot_chess[i].chess_type, parrot_map_pos.index(parrot_chess[i].cur_cell.position))
+        # else:
+        #     canvas.blit(parrot, tuple(parrot_chess[i].cur_cell.position))
 
-        for i in range(4):
-            if parrot_chess[i].cur_cell.position in parrot_map_pos:
-                drawPlayer(parrot_chess[i].chess_type, parrot_map_pos.index(parrot_chess[i].cur_cell.position))
-            # else:
-            #     canvas.blit(parrot, tuple(parrot_chess[i].cur_cell.position))
-
-        for i in range(4):
-            if duck_chess[i].cur_cell.position in duck_map_pos:
-                drawPlayer(duck_chess[i].chess_type, duck_map_pos.index(duck_chess[i].cur_cell.position))
-            # else:
-            #     canvas.blit(duck, tuple(duck_chess[i].cur_cell.position))
+    for i in range(4):
+        if duck_chess[i].sum!=None:
+        # if duck_chess[i].cur_cell.position in duck_map_pos:
+        #     print("duck",duck_chess[i].cur_cell)
+            drawPlayer(duck_chess[i].chess_type, duck_map_pos.index(duck_chess[i].cur_cell.position))
+        # else:
+        #     canvas.blit(duck, tuple(duck_chess[i].cur_cell.position))
 
 
 def gameControl():
