@@ -20,6 +20,7 @@ from func import selectOption
 from func import determineOption
 from func import getAirport
 from func import findWinner
+from func import ai
 from chess import *
 from cell import *
 
@@ -34,7 +35,7 @@ os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (100, 30)
 canvas = pygame.display.set_mode((967, 741))
 canvas.fill([255, 255, 255])
 # 设置窗口标题
-pygame.display.set_caption("Game")
+pygame.display.set_caption("Game2")
 
 # 图片加载
 start = pygame.image.load('images/start.png')
@@ -164,7 +165,7 @@ def gameControl(s,n):
                 options=getOptions(step,'chick',chicken_chess)
                 num=int(selectOption(options,chicken_chess))
                 cur_sum=determineOption(step,num,chicken_chess)
-
+                AI=0
                 final=findWinner('chick',chicken_chess)
                 if final==1:
                     return
@@ -194,6 +195,7 @@ def gameControl(s,n):
                 options=getOptions(step,'hippo',hippo_chess)
                 num=int(selectOption(options,hippo_chess))
                 cur_sum=determineOption(step,num,hippo_chess)
+                AI=0
                 final=findWinner('hippo',hippo_chess)
                 if final==1:
                     return
@@ -201,13 +203,15 @@ def gameControl(s,n):
                 options=getOptions(step,'parrot',parrot_chess)
                 num=int(selectOption(options,parrot_chess))
                 cur_sum=determineOption(step,num,parrot_chess)
+                AI=1
                 final=findWinner('parrot',parrot_chess)
                 if final==1:
                     return
             elif turn == 3:
                 options=getOptions(step,'duck',duck_chess)
-                num=int(selectOption(options,duck_chess))
+                num=int(ai(step,options,duck_chess))
                 cur_sum=determineOption(step,num,duck_chess)
+                AI=0
                 final=findWinner('duck',duck_chess)
                 if final==1:
                     return
@@ -225,25 +229,28 @@ def gameControl(s,n):
             if turn == 0:
                 options=getOptions(step,'chick',chicken_chess)
                 cur_sum=determineOption(step,n,chicken_chess)
-
+                AI=0
                 final=findWinner('chick',chicken_chess)
                 if final==1:
                     return
             elif turn == 1:
                 options=getOptions(step,'hippo',hippo_chess)
                 cur_sum=determineOption(step,n,hippo_chess)
+                AI=0
                 final=findWinner('hippo',hippo_chess)
                 if final==1:
                     return
             elif turn == 2:
                 options=getOptions(step,'parrot',parrot_chess)
                 cur_sum=determineOption(step,n,parrot_chess)
+                AI=1
                 final=findWinner('parrot',parrot_chess)
                 if final==1:
                     return
             elif turn == 3:
                 options=getOptions(step,'duck',duck_chess)
                 cur_sum=determineOption(step,n,duck_chess)
+                AI=0
                 final=findWinner('duck',duck_chess)
                 if final==1:
                     return
@@ -291,7 +298,7 @@ data = {
         }
 
 s.sendall((json.dumps(data, ensure_ascii=False) + '|#|').encode())
-
+AI=0
 bytes = eval(s.recv(4096).decode('utf8').split('|#|')[0])
 s.settimeout(0.1)
 while True:
@@ -318,11 +325,17 @@ while True:
             select_chess = bytes['move_chess']
             step = bytes['step']
             final = bytes['if_final']
+            # AI=bytes['AI']
             gameControl(step,select_chess)
             if turn == 3 :
                 turn = 0
+                AI=0
+            elif turn==2:
+                turn=3
+                AI=1
             else:
                 turn += 1
+                AI=0
             bytes = None
 
     for event in pygame.event.get():
@@ -354,10 +367,11 @@ while True:
                 'move_chess':move_chess,
                 'step':step,
                 'if_final':final
+                # 'AI':AI
             }
             s.sendall((json.dumps(data, ensure_ascii=False) + '|#|').encode())
             turn = 1
-
+            AI=0
         elif event.type == KEYDOWN and event.key == K_1 and turn == 1 and turn +1 == player_num:
             step = random.randint(1, 6)
             move_chess = gameControl(step,None)
@@ -367,9 +381,11 @@ while True:
                 'move_chess':move_chess,
                 'step':step,
                 'if_final':final
+                # 'AI':AI
             }
             s.sendall((json.dumps(data, ensure_ascii=False) + '|#|').encode())
             turn = 2
+            AI=0
         elif event.type == KEYDOWN and event.key == K_2 and turn == 2 and turn +1 == player_num:
             step = random.randint(1, 6)
             move_chess = gameControl(step,None)
@@ -379,10 +395,12 @@ while True:
                 'move_chess':move_chess,
                 'step':step,
                 'if_final':final
+                # 'AI':AI
             }
             s.sendall((json.dumps(data, ensure_ascii=False) + '|#|').encode())
             turn = 3
-        elif event.type == KEYDOWN and event.key == K_3 and turn == 3 and turn +1 == player_num:
+            AI=1
+        elif AI==1 and turn == 3 and turn +1 == player_num:
             step = random.randint(1, 6)
             move_chess = gameControl(step,None)
             data = {
@@ -391,8 +409,9 @@ while True:
                 'move_chess':move_chess,
                 'step':step,
                 'if_final':final
+                # 'AI':AI
             }
             s.sendall((json.dumps(data, ensure_ascii=False) + '|#|').encode())
             turn = 0
-
+            AI=0
     pygame.display.update()

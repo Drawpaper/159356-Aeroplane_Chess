@@ -10,6 +10,8 @@ from pygame.locals import *
 from sys import exit
 from cell import *
 import chess
+import eventlet
+import copy
 
 import tkinter as tk
 from  tkinter import messagebox
@@ -269,7 +271,6 @@ def getOptions(step,chesstype,chesslist):
 
                 if  pass_num==step:
                     options.append(a_piece.chess_num)
-
     return options
 
 
@@ -331,8 +332,196 @@ def selectOption(options,chesslist):
 
     tk.Button(root, text="press", command = on_click).pack()
     root.mainloop()
-
     return num
+
+#AI
+#没有选择时，pass （options=[]）
+#只有一个选择时，就选这个 （len（options）==1）
+#选择有两个以上 (len（options）>1)
+     #因为只有掷到6才能起飞，机会难得，优先级最高，凡是掷到6都执行起飞操作
+     #当棋子移动时，为避免其它棋子优先到达终点，撞子操作要优于跳子和飞子
+     #普通棋子移动，以移动步数大小作为优先标准
+def ai(step,options,chesslist):
+    if options==[]:
+        return False
+    else:
+        # global num
+        num=options[0]
+        if len(options)>1:
+            steps=Simulated_moving(step,num,chesslist)
+            for x in range(1,len(options)):
+                steps1=Simulated_moving(step,options[x],chesslist)
+                if steps1>=steps:
+                    num=options[x]
+                    steps=steps1
+    return num
+
+#模拟ai移动
+def Simulated_moving(step,num,chesslist):
+    if num==False:
+        return 0
+    else:
+        #用来记录执行了哪些函数:起飞+100,优先级最高；碰撞+50，第二优先；移动+step，跳+4，飞+12，优先级按总的移动步数
+        funcs=0
+        chesslist1=copy.deepcopy(chesslist)
+        chickmap=copy.deepcopy(chicken_map)
+        hippomap=copy.deepcopy(hippo_map)
+        parrotmap=copy.deepcopy(parrot_map)
+        duckmap=copy.deepcopy(duck_map)
+        # for x in chesslist:
+        #     chesslist1.append(x)
+        # for x in chicken_map:
+        #     chickmap.append(x)
+        # for x in hippo_map:
+        #     hippomap.append(x)
+        # for x in parrot_map:
+        #     parrotmap.append(x)
+        # for x in duck_map:
+        #     duckmap.append(x)
+        chessNow=chesslist1[num-1]
+        if chessNow.sum==None:
+            chessNow.takeOff(num-1)
+            c=chesslist1[num-1].cur_cell
+            c.deleteCurrentChess(chessNow)
+            funcs+=100
+
+            #更新cell的信息
+            if chessNow.chess_type=='chick':
+                chessNow.cur_cell=chickmap[0]
+                chickmap[0].cur_chess.append(chessNow)
+            elif chessNow.chess_type=='hippo':
+                chessNow.cur_cell=hippomap[0]
+                hippomap[0].cur_chess.append(chessNow)
+            elif chessNow.chess_type=='parrot':
+                chessNow.cur_cell=parrotmap[0]
+                parrotmap[0].cur_chess.append(chessNow)
+            else:
+                chessNow.cur_cell=duckmap[0]
+                duckmap[0].cur_chess.append(chessNow)
+            C=Simulated_collide(chessNow)
+            if C==True:
+                funcs+=50
+
+        else:
+            chessNow.sum+=step
+            funcs+=step
+            if chessNow.chess_type=='chick':
+                chessmap=chickmap
+            elif chessNow.chess_type=='hippo':
+                chessmap=hippomap
+            elif chessNow.chess_type=='parrot':
+                chessmap=parrotmap
+            else:
+                chessmap=duckmap
+
+            for i in range(len(chessmap)):
+                if chessNow.cur_cell==chessmap[i]:
+                    chessNow.cur_cell.deleteCurrentChess(chessNow)
+                    chessNow.cur_cell=chessmap[i+step]
+                    chessmap[i+step].cur_chess.append(chessNow)
+                    break
+            C=Simulated_collide(chessNow)
+            if C==True:
+                funcs+=50
+            #飞棋
+            flychess=chessNow.cur_cell.checkFly(chessNow)
+            if flychess!=None:
+                chessNow=flychess
+                for i in range(len(chessmap)):
+                    if chessNow.cur_cell==chessmap[i]:
+                        chessNow.cur_cell.deleteCurrentChess(chessNow)
+                        chessNow.cur_cell=chessmap[i+12]
+                        chessmap[i+12].cur_chess.append(chessNow)
+                        funcs+=12
+                        break
+                C=Simulated_collide(chessNow)
+                if C==True:
+                    funcs+=50
+
+            #跳棋
+            jumpchess=chessNow.cur_cell.checkJump(chessNow)
+            if jumpchess!=None:
+                chessNow=jumpchess
+                for i in range(len(chessmap)):
+                    if chessNow.cur_cell==chessmap[i]:
+                        chessNow.cur_cell.deleteCurrentChess(chessNow)
+                        chessNow.cur_cell=chessmap[i+4]
+                        chessmap[i+4].cur_chess.append(chessNow)
+                        funcs+=4
+                        break
+                C=Simulated_collide(chessNow)
+                if C==True:
+                    funcs+=50
+
+            #飞棋
+            flychess=chessNow.cur_cell.checkFly(chessNow)
+            if flychess!=None:
+                chessNow=flychess
+                for i in range(len(chessmap)):
+                    if chessNow.cur_cell==chessmap[i]:
+                        chessNow.cur_cell.deleteCurrentChess(chessNow)
+                        chessNow.cur_cell=chessmap[i+12]
+                        chessmap[i+12].cur_chess.append(chessNow)
+                        funcs+=12
+                        break
+                C=Simulated_collide(chessNow)
+                if C==True:
+                    funcs+=50
+        #
+        # if chickmap!=chicken_map or hippomap!=hippo_map or parrotmap!=parrot_map or duckmap!=duck_map:
+        #     print("yes")
+        # else:
+        #     print("nooooo")
+        return funcs
+
+#模拟碰撞
+def Simulated_collide(chess):
+    chickairport=copy.deepcopy(chicken_airport)
+    hippoairport=copy.deepcopy(hippo_airport)
+    parrotairport=copy.deepcopy(parrot_airport)
+    duckairport=copy.deepcopy(duck_airport)
+
+    # for x in chicken_airport:
+    #     chickairport.append(x)
+    # for x in hippo_airport:
+    #     hippoairport.append(x)
+    # for x in parrot_airport:
+    #     parrotairport.append(x)
+    # for x in duck_airport:
+    #     duckairport.append(x)
+
+    c=chess.cur_cell
+    collidechess=c.checkCollide(chess)
+    if collidechess != None:
+        for chess1 in collidechess:
+            chess1.sum = None
+            c.cur_chess.remove(chess1)
+            if chess1.chess_type=='chick':
+                for x in chickairport:
+                    if x.cur_chess==[]:
+                        chess1.cur_cell=x
+                        x.cur_chess.append(chess1)
+                        break
+            elif chess1.chess_type=='hippo':
+                for x in hippoairport:
+                    if x.cur_chess==[]:
+                        chess1.cur_cell=x
+                        x.cur_chess.append(chess1)
+                        break
+            elif chess1.chess_type=='parrot':
+                for x in parrotairport:
+                    if x.cur_chess==[]:
+                        chess1.cur_cell=x
+                        x.cur_chess.append(chess1)
+                        break
+            else:
+                for x in duckairport:
+                    if x.cur_chess==[]:
+                        chess1.cur_cell=x
+                        x.cur_chess.append(chess1)
+                        break
+        return True
+    return False
 
 #一个函数以用户所选棋子的类为输入，判断棋子的位置（通过判断棋子的sum或cur_cell）
     #若为none则为起始点，则执行chess中的起飞函数。该函数使当前棋子移动到该棋子路线上的第一个cell，并更新此cell的信息
@@ -354,7 +543,6 @@ def determineOption(step,num,chesslist):
             chessNow.takeOff(num-1)
             c=chesslist[num-1].cur_cell
             c.deleteCurrentChess(chessNow)
-            # c.cur_chess.remove(chessNow)
             #更新cell的信息
             if chessNow.chess_type=='chick':
                 chessNow.cur_cell=chicken_map[0]
@@ -384,15 +572,10 @@ def determineOption(step,num,chesslist):
             for i in range(len(chessmap)):
                 if chessNow.cur_cell==chessmap[i]:
                     chessNow.cur_cell.deleteCurrentChess(chessNow)
-                    # if i+step<=54:
                     chessNow.cur_cell=chessmap[i+step]
                     chessmap[i+step].cur_chess.append(chessNow)
-                    # else:
-                    #     chessNow.cur_cell=chessmap[i+step-55]
-                    #     chessmap[i+step-55].cur_chess.append(chessNow)
                     break
             collide(chessNow)
-
             #飞棋
             flychess=chessNow.cur_cell.checkFly(chessNow)
             if flychess!=None:
@@ -400,12 +583,8 @@ def determineOption(step,num,chesslist):
                 for i in range(len(chessmap)):
                     if chessNow.cur_cell==chessmap[i]:
                         chessNow.cur_cell.deleteCurrentChess(chessNow)
-                        # if i+step<=54:
                         chessNow.cur_cell=chessmap[i+12]
                         chessmap[i+12].cur_chess.append(chessNow)
-                        # else:
-                        #     chessNow.cur_cell=chessmap[i+12-55]
-                        #     chessmap[i+12-55].cur_chess.append(chessNow)
                         break
                 collide(chessNow)
 
@@ -416,12 +595,8 @@ def determineOption(step,num,chesslist):
                 for i in range(len(chessmap)):
                     if chessNow.cur_cell==chessmap[i]:
                         chessNow.cur_cell.deleteCurrentChess(chessNow)
-                        # if i+4<=54:
                         chessNow.cur_cell=chessmap[i+4]
                         chessmap[i+4].cur_chess.append(chessNow)
-                        # else:
-                        #     chessNow.cur_cell=chessmap[i+4-55]
-                        #     chessmap[i+4-55].cur_chess.append(chessNow)
                         break
                 collide(chessNow)
 
@@ -432,12 +607,8 @@ def determineOption(step,num,chesslist):
                 for i in range(len(chessmap)):
                     if chessNow.cur_cell==chessmap[i]:
                         chessNow.cur_cell.deleteCurrentChess(chessNow)
-                        # if i+step<=54:
                         chessNow.cur_cell=chessmap[i+12]
                         chessmap[i+12].cur_chess.append(chessNow)
-                        # else:
-                        #     chessNow.cur_cell=chessmap[i+12-55]
-                        #     chessmap[i+12-55].cur_chess.append(chessNow)
                         break
                 collide(chessNow)
 
@@ -510,6 +681,3 @@ def findWinner(chesstype,chesslist):
         return 1
     else:
         return 0
-
-
-

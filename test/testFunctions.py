@@ -4,7 +4,6 @@ sys.path.append('../src/images/')
 sys.path.append('../src/')
 
 from src.test1 import collide
-from src.test1 import get_Airport_Chess
 from src.test1 import determineOption
 from src.test1 import getMap
 from src.test1 import getAirport

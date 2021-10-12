@@ -18,6 +18,7 @@ from func import selectOption
 from func import determineOption
 from func import getAirport
 from func import findWinner
+from func import ai
 from chess import *
 from cell import *
 
@@ -167,7 +168,7 @@ def gameControl():
             #一个函数以可选棋子的类为输入，在其中触发弹框使用户选择移动的棋子，返回对应棋子的类（一个）
             # ③ selectOption(options,chicken_chess) ！！！cur_cell未解决！！！ 具体解释见func.py
             options=getOptions(step,'chick',chicken_chess)
-            num=int(selectOption(options,chicken_chess))
+            num=ai(step,options,chicken_chess)
             cur_sum=determineOption(step,num,chicken_chess)
 
             final=findWinner('chick',chicken_chess)
