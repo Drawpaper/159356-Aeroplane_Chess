@@ -135,7 +135,7 @@ class TestFunction(unittest.TestCase):
         chess1=self.chicken_chess[4]
         chess1.sum=0
         determineOption(1,5,self.chicken_chess)
-        self.assertEqual(chess1.sum,13,msg="test_determineOption_4 was failed.")
+        self.assertEqual(chess1.sum,25,msg="test_determineOption_4 was failed.")
         self.assertNotEqual(chess1.cur_cell,self.cell1,msg="test_determineOption_4 was failed.")
 
 
@@ -169,7 +169,7 @@ class TestFunction(unittest.TestCase):
         chesslist=[chickchess1,chickchess2,chickchess3,chickchess4]
 
         # 预期结果：
-        # 测试1：step=1 , chickenchess  [2,3,4]
+        # 测试1：step=1 , chickenchess  [2,4]
         # 测试2：step=2 ，chickenchess  [2]
         # 测试3：step=3 , chickenchess  [2]
         # 测试4：step=4 , chickenchess  []
@@ -177,7 +177,7 @@ class TestFunction(unittest.TestCase):
         # 测试6：step=6 , chickenchess  [1]
 
         options1=getOptions(1,'chick',chesslist)# 测试1
-        self.assertEqual(options1,[2,3,4])
+        self.assertEqual(options1,[2,4])
 
         options2=getOptions(2,'chick',chesslist)# 测试2
         self.assertEqual(options2,[2])
