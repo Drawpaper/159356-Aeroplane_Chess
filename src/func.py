@@ -10,7 +10,7 @@ from pygame.locals import *
 from sys import exit
 from cell import *
 import chess
-import eventlet
+
 import copy
 
 import tkinter as tk
@@ -681,3 +681,4 @@ def findWinner(chesstype,chesslist):
         return 1
     else:
         return 0
+

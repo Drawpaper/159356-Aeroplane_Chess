@@ -24,6 +24,8 @@ from func import ai
 from chess import *
 from cell import *
 
+from login import login
+
 
 import time
 from threading import Thread
@@ -312,6 +314,12 @@ while True:
         if player_num == None and bytes['protocol'] == 'connect':
             player_num = bytes['number']
             print(bytes)
+
+            # log in
+            users= {'user1':'111111','user2':'222222','user3':'333333','user4':'444444'}
+            users=login(bytes,users)
+            # print(users)
+
             bytes = None
         elif bytes['protocol'] == 'ready':
             if state == 'START':
