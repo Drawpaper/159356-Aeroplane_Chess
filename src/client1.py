@@ -367,13 +367,19 @@ while True:
                 s.sendall((json.dumps(data, ensure_ascii=False) + '|#|').encode())
             if state == 'READY':
                 state = 'RUNNING'
+            if turn +1 == player_num:
+                turnWindow=tk.Tk()
+                turnWindow.title('Turn')
+                tk.messagebox.showinfo(title = 'Hint',message = "It is your turn~~~ ")
+                turnWindow.quit()
+                turnWindow.destroy()
             print(103)
         elif event.type == KEYDOWN and event.key == K_0 and turn == 0 and turn +1 == player_num:
-            turnWindow=tk.Tk()
-            turnWindow.title('Turn')
-            tk.messagebox.showinfo(title = 'Hint',message = "It is your turn~~~ ")
-            turnWindow.quit()
-            turnWindow.destroy()
+            # turnWindow=tk.Tk()
+            # turnWindow.title('Turn')
+            # tk.messagebox.showinfo(title = 'Hint',message = "It is your turn~~~ ")
+            # turnWindow.quit()
+            # turnWindow.destroy()
 
             step = random.randint(1, 6)
             move_chess = gameControl(step,None)
@@ -389,11 +395,11 @@ while True:
             turn = 1
             AI=0
         elif event.type == KEYDOWN and event.key == K_1 and turn == 1 and turn +1 == player_num:
-            turnWindow=tk.Tk()
-            turnWindow.title('Turn')
-            tk.messagebox.showinfo(title = 'Hint',message = "It is your turn~~~ ")
-            turnWindow.quit()
-            turnWindow.destroy()
+            # turnWindow=tk.Tk()
+            # turnWindow.title('Turn')
+            # tk.messagebox.showinfo(title = 'Hint',message = "It is your turn~~~ ")
+            # turnWindow.quit()
+            # turnWindow.destroy()
 
             step = random.randint(1, 6)
             move_chess = gameControl(step,None)
@@ -409,11 +415,11 @@ while True:
             turn = 2
             AI=0
         elif event.type == KEYDOWN and event.key == K_2 and turn == 2 and turn +1 == player_num:
-            turnWindow=tk.Tk()
-            turnWindow.title('Turn')
-            tk.messagebox.showinfo(title = 'Hint',message = "It is your turn~~~ ")
-            turnWindow.quit()
-            turnWindow.destroy()
+            # turnWindow=tk.Tk()
+            # turnWindow.title('Turn')
+            # tk.messagebox.showinfo(title = 'Hint',message = "It is your turn~~~ ")
+            # turnWindow.quit()
+            # turnWindow.destroy()
 
             step = random.randint(1, 6)
             move_chess = gameControl(step,None)
