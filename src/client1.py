@@ -25,7 +25,8 @@ from chess import *
 from cell import *
 
 from login import login
-
+import tkinter as tk
+from  tkinter import messagebox
 
 import time
 from threading import Thread
@@ -298,15 +299,15 @@ data = {
             'username': 'user1',
             'password': '111111'
         }
-
-s.sendall((json.dumps(data, ensure_ascii=False) + '|#|').encode())
+s.sendall((json.dumps(data, ensure_ascii=False) + '|#|').encode())#s.sendall把data发到server
 AI=0
 bytes = eval(s.recv(4096).decode('utf8').split('|#|')[0])
 s.settimeout(0.1)
+
 while True:
 
     try:
-        bytes = eval(s.recv(4096).decode('utf8').split('|#|')[0])
+        bytes = eval(s.recv(4096).decode('utf8').split('|#|')[0])#传回来的地方
         print(bytes)
     except socket.timeout:
         pass
@@ -315,9 +316,9 @@ while True:
             player_num = bytes['number']
             print(bytes)
 
-            # log in
+            # log in（s）
             users= {'user1':'111111','user2':'222222','user3':'333333','user4':'444444'}
-            users=login(bytes,users)
+            users=login(bytes,users)# 弄一个新的protocol名字 读写文件判断都放到新的protocol里 传入s参数和player_num
             # print(users)
 
             bytes = None
@@ -346,6 +347,7 @@ while True:
                 AI=0
             bytes = None
 
+######################turn+1==player_num 就是当前玩家的回合了， 每一个elif下面加一个弹框 #################################################
     for event in pygame.event.get():
         if event.type == QUIT or event.type == KEYDOWN and event.key == K_ESCAPE:
             pygame.quit()
@@ -367,6 +369,12 @@ while True:
                 state = 'RUNNING'
             print(103)
         elif event.type == KEYDOWN and event.key == K_0 and turn == 0 and turn +1 == player_num:
+            turnWindow=tk.Tk()
+            turnWindow.title('Turn')
+            tk.messagebox.showinfo(title = 'Hint',message = "It is your turn~~~ ")
+            turnWindow.quit()
+            turnWindow.destroy()
+
             step = random.randint(1, 6)
             move_chess = gameControl(step,None)
             data = {
@@ -381,6 +389,12 @@ while True:
             turn = 1
             AI=0
         elif event.type == KEYDOWN and event.key == K_1 and turn == 1 and turn +1 == player_num:
+            turnWindow=tk.Tk()
+            turnWindow.title('Turn')
+            tk.messagebox.showinfo(title = 'Hint',message = "It is your turn~~~ ")
+            turnWindow.quit()
+            turnWindow.destroy()
+
             step = random.randint(1, 6)
             move_chess = gameControl(step,None)
             data = {
@@ -395,6 +409,12 @@ while True:
             turn = 2
             AI=0
         elif event.type == KEYDOWN and event.key == K_2 and turn == 2 and turn +1 == player_num:
+            turnWindow=tk.Tk()
+            turnWindow.title('Turn')
+            tk.messagebox.showinfo(title = 'Hint',message = "It is your turn~~~ ")
+            turnWindow.quit()
+            turnWindow.destroy()
+
             step = random.randint(1, 6)
             move_chess = gameControl(step,None)
             data = {

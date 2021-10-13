@@ -101,22 +101,25 @@ class Player(Connection):
         self.connect_num = 0
         super().__init__(*args)
 
-    def deal_data(self, bytes):
+    def deal_data(self, bytes):# 接收data
         """
         处理服务端发送的数据
         :param bytes:
         :return:
         """
-        bytes = eval(bytes.decode('utf8').split('|#|')[0])
+        bytes = eval(bytes.decode('utf8').split('|#|')[0]) #传过来的data
         if bytes['protocol'] == 'connect':
-
-            if bytes['username'] in self.log and self.log[bytes['username']] == bytes['password']:
+            #添加读写文件
+            # if bytes['username'] in self.log and self.log[bytes['username']] == bytes['password']: 移到login
                 data = {
                 'protocol': 'connect',
                 'number' : len(self.connections)
-                }
+                # judge： true/false 说明账户密码对不对
+                }# 传回来 第几个玩家
 
                 self.send_self(data)
+        # byte【protocol】 register 写文件操作 新账号密码 两个新的elif（两个新protocol名字） :
+        # 一个登录（读写操作和判断 加judge）sens_self(data)一个注册（写文件）
         elif bytes['protocol'] == 'ready':
             """
             {

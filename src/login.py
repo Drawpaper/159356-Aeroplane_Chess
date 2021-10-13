@@ -2,6 +2,12 @@ import tkinter as tk
 from  tkinter import messagebox
 
 # log in
+##data = {
+        #     'protocol': 'connect',
+        #     'username': 'user1',
+        #     'password': '111111'
+        # }
+
 def login(bytes,users):
     # users= {'user1':'111111','user2':'222222','user3':'333333','user4':'444444'}
 
@@ -19,7 +25,7 @@ def login(bytes,users):
         usr_name = var_usr_name.get()
         usr_pwd = var_usr_pwd.get()
 
-        if usr_name in users and users[usr_name]==usr_pwd:
+        if usr_name in users and users[usr_name]==usr_pwd:# 传到server
             if bytes['number']==1:
                 chesscolor="【yellow】 chess"
                 order="Already 1 players,continued...."
