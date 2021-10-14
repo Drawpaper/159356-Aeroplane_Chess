@@ -367,14 +367,16 @@ while True:
                 s.sendall((json.dumps(data, ensure_ascii=False) + '|#|').encode())
             if state == 'READY':
                 state = 'RUNNING'
-            if turn +1 == player_num:
+            print(103)
+
+        if event.type == MOUSEBUTTONDOWN and turn +1 == player_num:
                 turnWindow=tk.Tk()
                 turnWindow.title('Turn')
                 tk.messagebox.showinfo(title = 'Hint',message = "It is your turn~~~ ")
                 turnWindow.quit()
                 turnWindow.destroy()
-            print(103)
-        elif event.type == KEYDOWN and event.key == K_0 and turn == 0 and turn +1 == player_num:
+
+        if event.type == KEYDOWN and event.key == K_0 and turn == 0 and turn +1 == player_num:
             # turnWindow=tk.Tk()
             # turnWindow.title('Turn')
             # tk.messagebox.showinfo(title = 'Hint',message = "It is your turn~~~ ")

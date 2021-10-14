@@ -372,7 +372,15 @@ while True:
                 turnWindow.quit()
                 turnWindow.destroy()
             print(103)
-        elif event.type == KEYDOWN and event.key == K_0 and turn == 0 and turn +1 == player_num:
+
+        if event.type == MOUSEBUTTONDOWN and turn +1 == player_num:
+                turnWindow=tk.Tk()
+                turnWindow.title('Turn')
+                tk.messagebox.showinfo(title = 'Hint',message = "It is your turn~~~ ")
+                turnWindow.quit()
+                turnWindow.destroy()
+
+        if event.type == KEYDOWN and event.key == K_0 and turn == 0 and turn +1 == player_num:
             # turnWindow=tk.Tk()
             # turnWindow.title('Turn')
             # tk.messagebox.showinfo(title = 'Hint',message = "It is your turn~~~ ")
