@@ -1,6 +1,6 @@
 import tkinter as tk
 from  tkinter import messagebox
-
+import json
 # log in
 ##data = {
         #     'protocol': 'connect',
@@ -8,7 +8,7 @@ from  tkinter import messagebox
         #     'password': '111111'
         # }
 
-def login(bytes,users):
+def login(s,player_num):
     # users= {'user1':'111111','user2':'222222','user3':'333333','user4':'444444'}
 
     window=tk.Tk()
@@ -25,17 +25,21 @@ def login(bytes,users):
         usr_name = var_usr_name.get()
         usr_pwd = var_usr_pwd.get()
 
-        if usr_name in users and users[usr_name]==usr_pwd:# 传到server
-            if bytes['number']==1:
+        pro={'username':usr_name,'password':usr_pwd,'protocol': 'login'}
+        s.sendall((json.dumps(pro, ensure_ascii=False) + '|#|').encode())
+
+        pro_reply = eval(s.recv(4096).decode('utf8').split('|#|')[0])
+        if pro_reply['judge']==1:# 传到server
+            if player_num==1:
                 chesscolor="【yellow】 chess"
                 order="Already 1 players,continued...."
-            elif bytes['number']==2:
+            elif player_num==2:
                 chesscolor="【blue】 chess"
                 order="Already 2 players,continued...."
-            elif bytes['number']==3:
+            elif player_num==3:
                 chesscolor="【red】 chess"
                 order="Already 3 players,continued...."
-            elif bytes['number']==4:
+            elif player_num==4:
                 chesscolor="【green】 chess"
                 order="Already 4 players,continued...."
 
@@ -47,21 +51,24 @@ def login(bytes,users):
                 tk.messagebox.showinfo(message = 'Error,your password is wrong,try again.')
 
     def usr_sign_up():
-        def sign_to_Mofan_Python():
+        def sign_to_Python():
 
             np = new_pwd.get()
-
             np_confirm = new_pwd_confirm.get()
-
             nn = new_name.get()
-            if nn in users:
-                tk.messagebox.showerror('Error','The user has already signed up!')
-            elif np!=np_confirm:
+
+            pro2={'username':nn,'password':np,'protocol': 'signup'}
+            s.sendall((json.dumps(pro2, ensure_ascii=False) + '|#|').encode())
+            pro_reply2 = eval(s.recv(4096).decode('utf8').split('|#|')[0])
+
+            if np!=np_confirm:
                 tk.messagebox.showerror('Error','the confirm password is different! ')
+            if pro_reply2['judge']==0:
+                tk.messagebox.showerror('Error','The user has already signed up!')
             else:
-                users[nn] = np
                 tk.messagebox.showinfo(message ='sign up successfully ! log in now!')
                 window_sign_up.destroy()
+
         window_sign_up = tk.Toplevel(window)
         window_sign_up.geometry('350x200')
         window_sign_up.title('Sign up window')
@@ -81,11 +88,10 @@ def login(bytes,users):
         entry_comfirm_sign_up = tk.Entry(window_sign_up,textvariable = new_pwd_confirm,show = '*')
         entry_comfirm_sign_up.place(x = 150,y = 90)
 
-        btn_comfirm_sign_up = tk.Button(window_sign_up,text = 'Sign up',command = sign_to_Mofan_Python)
+        btn_comfirm_sign_up = tk.Button(window_sign_up,text = 'Sign up',command = sign_to_Python)
         btn_comfirm_sign_up.place(x = 150,y = 130)
 
     var_usr_name = tk.StringVar()
-    # input
     var_usr_pwd = tk.StringVar()
     entry_usr_name = tk.Entry(window,textvariable = var_usr_name)
     entry_usr_name.place(x = 160,y = 100)
@@ -98,5 +104,5 @@ def login(bytes,users):
     btn_sign_up.place(x = 270,y = 230)
 
     window.mainloop()
-    return users
+    return
 

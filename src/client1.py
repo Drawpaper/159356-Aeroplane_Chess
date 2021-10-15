@@ -316,10 +316,7 @@ while True:
             player_num = bytes['number']
             print(bytes)
 
-            # log in（s）
-            users= {'user1':'111111','user2':'222222','user3':'333333','user4':'444444'}
-            users=login(bytes,users)# 弄一个新的protocol名字 读写文件判断都放到新的protocol里 传入s参数和player_num
-            # print(users)
+            login(s,player_num)# 弄一个新的protocol名字 读写文件判断都放到新的protocol里 传入s参数和player_num
 
             bytes = None
         elif bytes['protocol'] == 'ready':

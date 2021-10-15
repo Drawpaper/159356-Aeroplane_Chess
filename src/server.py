@@ -4,6 +4,7 @@ import datetime
 import traceback
 import json
 import random
+import csv
 
 class Server:
     """
@@ -109,17 +110,63 @@ class Player(Connection):
         """
         bytes = eval(bytes.decode('utf8').split('|#|')[0]) #传过来的data
         if bytes['protocol'] == 'connect':
-            #添加读写文件
-            # if bytes['username'] in self.log and self.log[bytes['username']] == bytes['password']: 移到login
+
                 data = {
                 'protocol': 'connect',
                 'number' : len(self.connections)
-                # judge： true/false 说明账户密码对不对
                 }# 传回来 第几个玩家
 
                 self.send_self(data)
         # byte【protocol】 register 写文件操作 新账号密码 两个新的elif（两个新protocol名字） :
         # 一个登录（读写操作和判断 加judge）sens_self(data)一个注册（写文件）
+        elif bytes['protocol']=='login':#登录
+            filename = 'data.csv'
+            dic_data={}
+            with open(filename) as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    username = row['username']
+                    password= row['password']
+                    # print(username)
+                    # print(password)
+                    dic_data[username]=password
+            if bytes['username'] in dic_data and dic_data[bytes['username']] == bytes['password']:
+                reply = {
+                'protocol': 'login-reply',
+                'number' : len(self.connections),
+                'judge':1
+                    # 说明账户密码对不对
+                }# 传回来 第几个玩家
+
+                self.send_self(reply)
+        elif bytes['protocol']=='signup':#注册
+            judge=1
+            filename = 'data.csv'
+            dic_data={}
+            with open(filename) as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    username = row['username']
+                    password= row['password']
+                    # print(username)
+                    # print(password)
+                    dic_data[username]=password
+            if bytes['username'] in dic_data:
+                judge=0
+                #玩家用户名已存在
+            if judge==1:
+                with open(r'data.csv',mode='a',newline='',encoding='utf8') as cfa:
+                    wf = csv.writer(cfa)
+                    data2 = [[bytes['username'],bytes['password']]]
+                    for i in data2:
+                        wf.writerow(i)
+            reply2 = {
+                'protocol': 'signup-reply',
+                'number' : len(self.connections),
+                'judge':judge
+                }
+            self.send_self(reply2)
+
         elif bytes['protocol'] == 'ready':
             """
             {

@@ -316,9 +316,8 @@ while True:
             print(bytes)
 
             # log in
-            users= {'user1':'111111','user2':'222222','user3':'333333','user4':'444444'}
-            users=login(bytes,users)
-            # print(users)
+            login(s,player_num)
+
 
             bytes = None
         elif bytes['protocol'] == 'ready':
